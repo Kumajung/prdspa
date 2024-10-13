@@ -29,13 +29,13 @@
         if ($result) {
     ?>
             <script>
-                $(()=>{
+                $(() => {
                     Swal.fire({
-                    icon: "success",
-                    title: 'บันทึกข้อมูลสำเร็จ',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
+                        icon: "success",
+                        title: 'บันทึกข้อมูลสำเร็จ',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
                 })
             </script>
     <?php
@@ -44,23 +44,23 @@
     ?>
     <main>
         <div class="container marketing">
-            <h1 class="mb-3 py-5">ข้อมูลการลูกค้า</h1>
+            <h1 class="mb-3 py-5">ข้อมูลการตำแหน่งพนักงาน</h1>
             <div class="col-md-6 mx-auto mb-3">
                 <form id="frm" method="POST">
                     <div class="card">
                         <div class="card-header">
                             <!-- employees_type -->
-                            <i class="fa-solid fa-list-check"></i> ส่วนจัดประเภทพนักงาน
+                            <i class="fa-solid fa-list-check"></i> ส่วนจัดตำแหน่งพนักงาน
                         </div>
                         <div class="card-body">
                             <div class="form-group row mb-3">
-                                <label for="position_name" class="col-sm-2 col-form-label">ชื่อประเภทพนักงาน</label>
-                                <div class="col-sm-10">
+                                <label for="position_name" class="col-sm-3 col-form-label">ชื่อประเภทพนักงาน</label>
+                                <div class="col-sm-9">
                                     <input type="text" class="form-control" id="position_name" name="position_name" placeholder="" autocomplete="off" required>
                                 </div>
                             </div>
                             <div class="form-group row mb-3">
-                                <div class="offset-sm-2 col-sm-6 d-grid">
+                                <div class="offset-sm-3 col-sm-6 d-grid">
                                     <button type="submit" name="submit" class="btn btn-primary"><i class="fa-regular fa-floppy-disk"></i> บันทึก</button>
                                 </div>
                             </div>
@@ -85,9 +85,12 @@
                         while ($rs_positions = mysqli_fetch_assoc($result_positions)) {
                         ?>
                             <tr>
-                                <td><?php echo $no; ?></td>
-                                <td><?php echo $rs_positions['position_name']; ?></td>
-                                <td>แก้ไข/ลบ</td>
+                                <td class="align-middle text-center"><?php echo $no; ?></td>
+                                <td class="align-middle"><?php echo $rs_positions['position_name']; ?></td>
+                                <td class="text-center align-middle">
+                                    <a class="btn btn-warning" href="position_edit.php?edit_id=<?php echo $rs_positions['position_id'] ?>"><i class="fa-regular fa-pen-to-square"></i> แก้ไข</a>
+                                    <button class="btn btn-danger" type="button" onclick="deletePos(<?php echo $rs_positions['position_id'] ?>,'<?php echo $rs_positions['position_name']; ?>')"><i class="fa-solid fa-trash"></i> ลบ</button>
+                                </td>
                             </tr>
                         <?php
                             $no++;
@@ -105,8 +108,31 @@
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
     <script>
         $('#example').DataTable();
+
+        function deletePos(position_id,txt) {
+            Swal.fire({
+                title: `ยืนยันลบ ${txt}?`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "ตกลง",
+                cancelButtonText: "ยกเลิก"
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "ลบข้อมูลสำเร็จ",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        window.location.href = 'position_delete.php?delete_id='+position_id;
+                    })
+                }
+            });
+        }
     </script>
-    
+
 
 
 </body>
