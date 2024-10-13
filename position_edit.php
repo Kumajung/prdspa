@@ -94,7 +94,7 @@
                             </div>
                         </div>
                     </div>
-                    </ด>
+                    </form>
             </div>
             <hr class="featurette-divider">
         </div>

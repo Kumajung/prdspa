@@ -1,4 +1,7 @@
-<?php require 'config/connect.php'; ?>
+<?php 
+require 'config/connect.php'; 
+require 'config/function.php'; 
+?>
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
 
@@ -24,18 +27,17 @@
     <?php
     if (isset($_POST['submit'])) {
         /* mysqli_real_escape_string ป้องกันการโจมตีแบบ SQL Injection (SQL Injection) */
-        $edit_id = mysqli_real_escape_string($conn, $_POST['edit_id']);
         $first_name = mysqli_real_escape_string($conn, $_POST['first_name']);
         $last_name = mysqli_real_escape_string($conn, $_POST['last_name']);
-        $telephone = mysqli_real_escape_string($conn, $_POST['telephone']);
-        $salary = mysqli_real_escape_string($conn, $_POST['salary']);
-        $position_id = mysqli_real_escape_string($conn, $_POST['position_id']);
-        $sql = " UPDATE employees SET first_name = '$first_name', 
-                                      last_name = '$last_name',
-                                      telephone = '$telephone',
-                                      salary = '$salary',
-                                      position_id = '$position_id'
-                                      WHERE employee_id = '$edit_id' ";
+        $email = mysqli_real_escape_string($conn, $_POST['email']);
+        $phone_number = mysqli_real_escape_string($conn, $_POST['phone_number']);
+        $address = mysqli_real_escape_string($conn, $_POST['address']);
+        $is_member = mysqli_real_escape_string($conn, $_POST['is_member']);
+        if($is_member == 1){
+            $sql = " INSERT INTO customers VALUES(NULL,'$first_name','$last_name','$email','$phone_number','$address','$is_member',CURRENT_TIMESTAMP) ";
+        }else{
+            $sql = " INSERT INTO customers VALUES(NULL,'$first_name','$last_name','$email','$phone_number','$address','$is_member',NULL) ";
+        }
         $result = mysqli_query($conn, $sql);
         if ($result) {
     ?>
@@ -46,90 +48,75 @@
                         title: 'บันทึกข้อมูลสำเร็จ',
                         showConfirmButton: false,
                         timer: 1500
-                    }).then(() => {
-                        window.location.href = 'employee.php';
-                    });
+                    })
                 })
             </script>
     <?php
         }
     }
     ?>
-    <?php
-    if (isset($_GET['edit_id'])) {
-        $edit_id = mysqli_real_escape_string($conn, $_GET['edit_id']);
-        $sql_edit = " SELECT * FROM employees WHERE employee_id = '$edit_id' ";
-        $result_edit = mysqli_query($conn, $sql_edit);
-        $num_edit = mysqli_num_rows($result_edit);
-        if ($num_edit === 0) {
-            header('Location:employee.php');
-            exit;
-        }
-        $rs_edit = mysqli_fetch_assoc($result_edit);
-    }
-    ?>
     <main>
         <div class="container marketing">
-            <h1 class="mb-3 py-5">ข้อมูลพนักงาน</h1>
+            <h1 class="mb-3 py-5">ข้อมูลลูกค้า</h1>
             <div class="col-md-6 mx-auto mb-3">
-                <form id="frm" method="POST">
+                <form id="frm" method="post">
                     <div class="card">
                         <div class="card-header">
                             <!-- employees_type -->
-                            <i class="fa-solid fa-users"></i> ส่วนจัดพนักงาน
+                            <i class="fa-regular fa-user"></i> ส่วนจัดลูกค้า
                         </div>
                         <div class="card-body">
                             <div class="form-group row mb-3">
                                 <label for="first_name" class="col-sm-3 col-form-label">ชื่อ</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo $rs_edit['first_name']; ?>" placeholder="" autocomplete="off" required>
+                                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="" autocomplete="off" required>
                                 </div>
                             </div>
                             <div class="form-group row mb-3">
                                 <label for="last_name" class="col-sm-3 col-form-label">นามสกุล</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="last_name" name="last_name" value="<?php echo $rs_edit['last_name']; ?>" placeholder="" autocomplete="off" required>
+                                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="" autocomplete="off" required>
                                 </div>
                             </div>
                             <div class="form-group row mb-3">
-                                <label for="telephone" class="col-sm-3 col-form-label">เบอร์โทรศัพท์</label>
+                                <label for="email" class="col-sm-3 col-form-label">อีเมล</label>
                                 <div class="col-sm-9">
-                                    <input type="tel" class="form-control" id="telephone" name="telephone" value="<?php echo $rs_edit['telephone']; ?>" placeholder="" autocomplete="off" required>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="" autocomplete="off" required>
                                 </div>
                             </div>
                             <div class="form-group row mb-3">
-                                <label for="salary" class="col-sm-3 col-form-label">เงินเดือน</label>
+                                <label for="phone_number" class="col-sm-3 col-form-label">เบอร์โทรศัพท์</label>
                                 <div class="col-sm-9">
-                                    <input type="number" step="0.01" class="form-control" id="salary" name="salary" value="<?php echo $rs_edit['salary']; ?>" placeholder="" autocomplete="off" required>
+                                    <input type="tel" class="form-control" id="phone_number" name="phone_number" placeholder="" autocomplete="off" required>
                                 </div>
                             </div>
                             <div class="form-group row mb-3">
-                                <label for="position_id" class="col-sm-3 col-form-label">ตำแหน่ง</label>
+                                <label for="address" class="col-sm-3 col-form-label">ที่อยู่</label>
                                 <div class="col-sm-9">
-                                    <select class="form-control" name="position_id" id="position_id">
-                                        <?php
-                                        $sql = " SELECT * FROM positions ORDER BY position_id ASC ";
-                                        $result = mysqli_query($conn, $sql);
-                                        while ($rs = mysqli_fetch_assoc($result)) {
-                                        ?>
-                                            <?php if ($rs['position_id'] == $rs_edit['position_id']) { ?>
-                                                <option value="<?php echo $rs['position_id']; ?>" selected><?php echo $rs['position_name']; ?></option>
-                                            <?php } else { ?>
-                                                <option value="<?php echo $rs['position_id']; ?>"><?php echo $rs['position_name']; ?></option>
-                                            <?php } ?>
+                                    <textarea class="form-control" name="address" id="address"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label for="is_member" class="col-sm-3 col-form-label">ประเภทสมาชิก</label>
+                                <div class="col-sm-9">
+                                    <?php
+                                    $member_array = ['ลูกค้าไม่เป็นสมาชิก', 'ลูกค้าสมาชิก'];
+                                    ?>
+                                    <select class="form-control" name="is_member" id="is_member">
+                                        <?php for ($i = 0; $i < count($member_array); $i++) { ?>
+                                            <option value="<?php echo $i; ?>"><?php echo $member_array[$i]; ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group row mb-3">
                                 <div class="offset-sm-3 col-sm-6 d-grid">
-                                    <input type="hidden" name="edit_id" value="<?php echo $rs_edit['employee_id']; ?>">
-                                    <button type="submit" name="submit" class="btn btn-warning"><i class="fa-regular fa-floppy-disk"></i> บันทึก</button>
+                                    <button type="submit" name="submit" class="btn btn-primary"><i class="fa-regular fa-floppy-disk"></i> บันทึก</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    </form>
+                </form>
             </div>
             <hr class="featurette-divider">
         </div>

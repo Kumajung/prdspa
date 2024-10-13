@@ -1,4 +1,7 @@
-<?php require 'config/connect.php'; ?>
+<?php
+require 'config/connect.php';
+require 'config/function.php';
+?>
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
 
@@ -26,10 +29,15 @@
         /* mysqli_real_escape_string ป้องกันการโจมตีแบบ SQL Injection (SQL Injection) */
         $first_name = mysqli_real_escape_string($conn, $_POST['first_name']);
         $last_name = mysqli_real_escape_string($conn, $_POST['last_name']);
-        $telephone = mysqli_real_escape_string($conn, $_POST['telephone']);
-        $salary = mysqli_real_escape_string($conn, $_POST['salary']);
-        $position_id = mysqli_real_escape_string($conn, $_POST['position_id']);
-        $sql = " INSERT INTO employees VALUES(NULL,'$first_name','$last_name','$telephone','$salary','$position_id') ";
+        $email = mysqli_real_escape_string($conn, $_POST['email']);
+        $phone_number = mysqli_real_escape_string($conn, $_POST['phone_number']);
+        $address = mysqli_real_escape_string($conn, $_POST['address']);
+        $is_member = mysqli_real_escape_string($conn, $_POST['is_member']);
+        if ($is_member == 1) {
+            $sql = " INSERT INTO customers VALUES(NULL,'$first_name','$last_name','$email','$phone_number','$address','$is_member',CURRENT_TIMESTAMP) ";
+        } else {
+            $sql = " INSERT INTO customers VALUES(NULL,'$first_name','$last_name','$email','$phone_number','$address','$is_member',NULL) ";
+        }
         $result = mysqli_query($conn, $sql);
         if ($result) {
     ?>
@@ -51,7 +59,7 @@
         <div class="container marketing">
             <h1 class="mb-3 py-5">ข้อมูลลูกค้า</h1>
             <div class="col-md-6 mx-auto mb-3">
-                <form id="frm" method="POST">
+                <form id="frm" method="post">
                     <div class="card">
                         <div class="card-header">
                             <!-- employees_type -->
@@ -71,27 +79,32 @@
                                 </div>
                             </div>
                             <div class="form-group row mb-3">
-                                <label for="telephone" class="col-sm-3 col-form-label">เบอร์โทรศัพท์</label>
+                                <label for="email" class="col-sm-3 col-form-label">อีเมล</label>
                                 <div class="col-sm-9">
-                                    <input type="tel" class="form-control" id="telephone" name="telephone" placeholder="" autocomplete="off" required>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="" autocomplete="off" required>
                                 </div>
                             </div>
                             <div class="form-group row mb-3">
-                                <label for="salary" class="col-sm-3 col-form-label">เงินเดือน</label>
+                                <label for="phone_number" class="col-sm-3 col-form-label">เบอร์โทรศัพท์</label>
                                 <div class="col-sm-9">
-                                    <input type="number" step="0.01" class="form-control" id="salary" name="salary" placeholder="" autocomplete="off" required>
+                                    <input type="tel" class="form-control" id="phone_number" name="phone_number" placeholder="" autocomplete="off" required>
                                 </div>
                             </div>
                             <div class="form-group row mb-3">
-                                <label for="position_id" class="col-sm-3 col-form-label">ตำแหน่ง</label>
+                                <label for="address" class="col-sm-3 col-form-label">ที่อยู่</label>
                                 <div class="col-sm-9">
-                                    <select class="form-control" name="position_id" id="position_id">
-                                        <?php
-                                        $sql = " SELECT * FROM positions ORDER BY position_id ASC ";
-                                        $result = mysqli_query($conn, $sql);
-                                        while ($rs = mysqli_fetch_assoc($result)) {
-                                        ?>
-                                            <option value="<?php echo $rs['position_id']; ?>"><?php echo $rs['position_name']; ?></option>
+                                    <textarea class="form-control" name="address" id="address"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label for="is_member" class="col-sm-3 col-form-label">ประเภทสมาชิก</label>
+                                <div class="col-sm-9">
+                                    <?php
+                                    $member_array = ['ลูกค้าไม่เป็นสมาชิก', 'ลูกค้าสมาชิก'];
+                                    ?>
+                                    <select class="form-control" name="is_member" id="is_member">
+                                        <?php for ($i = 0; $i < count($member_array); $i++) { ?>
+                                            <option value="<?php echo $i; ?>"><?php echo $member_array[$i]; ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
@@ -103,36 +116,48 @@
                             </div>
                         </div>
                     </div>
-                    </ด>
+                </form>
             </div>
             <div class="table-responsive">
-                <table class="table table-striped table-hover table-bordered mt-3" id="dataTable">
+                <table class="table table-striped table-hover table-bordered mt-3 text-nowrap" id="dataTable">
                     <thead>
                         <tr>
                             <th scope="col" class="text-center">ลำดับ</th>
                             <th scope="col">ชื่อ-นามสกุล</th>
+                            <th class="text-center" scope="col">อีเมล</th>
                             <th class="text-center" scope="col">เบอร์โทรศัพท์</th>
-                            <th class="text-center" scope="col">ตำแหน่ง</th>
-                            <th class="text-center" scope="col">เงินเดือน</th>
+                            <th class="text-center" scope="col">ที่อยู่</th>
+                            <th class="text-center" scope="col">ประเภทสมาชิก</th>
+                            <th class="text-center" scope="col">วันที่เป็นสมาชิก</th>
                             <th scope="col" class="text-center">จัดการ</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         $no = 1;
-                        $sql_employees = " SELECT employees.*,positions.position_name FROM employees INNER JOIN positions USING(position_id) ORDER BY employees.employee_id ASC ";
-                        $result_employees = mysqli_query($conn, $sql_employees);
-                        while ($rs_employees = mysqli_fetch_assoc($result_employees)) {
+                        $sql_customer = " SELECT * FROM customers ORDER BY customer_id ASC ";
+                        $result_customer = mysqli_query($conn, $sql_customer);
+                        while ($rs_customer = mysqli_fetch_assoc($result_customer)) {
                         ?>
                             <tr>
                                 <td class="align-middle text-center"><?php echo $no; ?></td>
-                                <td class="align-middle"><?php echo $rs_employees['first_name']; ?>&nbsp;&nbsp;<?php echo $rs_employees['last_name']; ?></td>
-                                <td class="align-middle text-center"><?php echo $rs_employees['telephone']; ?></td>
-                                <td class="align-middle text-center"><?php echo number_format($rs_employees['salary'],2); ?></td>
-                                <td class="align-middle text-center"><?php echo $rs_employees['position_name']; ?></td>
+                                <td class="align-middle"><?php echo $rs_customer['first_name']; ?>&nbsp;&nbsp;<?php echo $rs_customer['last_name']; ?></td>
+                                <td class="align-middle text-center"><?php echo $rs_customer['email']; ?></td>
+                                <td class="align-middle text-center"><?php echo $rs_customer['phone_number']; ?></td>
+                                <td class="align-middle text-center"><?php echo nl2br($rs_customer['address']); ?></td>
+                                <td class="align-middle text-center"><?php echo $member_array[$rs_customer['is_member']]; ?></td>
+                                <td class="align-middle text-center">
+                                    <?php
+                                    if ($rs_customer['is_member'] == 1) {
+                                        echo date_times($rs_customer['member_date']);
+                                    } else {
+                                        echo "-";
+                                    }
+                                    ?>
+                                </td>
                                 <td class="text-center align-middle">
-                                    <a class="btn btn-warning" href="employee_edit.php?edit_id=<?php echo $rs_employees['employee_id'] ?>"><i class="fa-regular fa-pen-to-square"></i> แก้ไข</a>
-                                    <button class="btn btn-danger" type="button" onclick="deletePos(<?php echo $rs_employees['employee_id'] ?>,'<?php echo $rs_employees['first_name']; ?>&nbsp;&nbsp;<?php echo $rs_employees['last_name']; ?>')"><i class="fa-solid fa-trash"></i> ลบ</button>
+                                    <a class="btn btn-warning" href="customer_edit.php?edit_id=<?php echo $rs_customer['customer_id'] ?>"><i class="fa-regular fa-pen-to-square"></i> แก้ไข</a>
+                                    <button class="btn btn-danger" type="button" onclick="deletePos(<?php echo $rs_customer['customer_id'] ?>,'<?php echo $rs_customer['first_name']; ?>&nbsp;&nbsp;<?php echo $rs_customer['last_name']; ?>')"><i class="fa-solid fa-trash"></i> ลบ</button>
                                 </td>
                             </tr>
                         <?php
@@ -193,15 +218,12 @@
                         showConfirmButton: false,
                         timer: 1500
                     }).then(() => {
-                        window.location.href = 'employee_delete.php?delete_id=' + position_id;
+                        window.location.href = 'customer_delete.php?delete_id=' + position_id;
                     })
                 }
             });
         }
     </script>
-
-
-
 </body>
 
 </html>

@@ -61,7 +61,7 @@
                                 </div>
                             </div>
                         </div>
-                        </ด>
+                        </form>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-striped table-hover table-bordered mt-3">

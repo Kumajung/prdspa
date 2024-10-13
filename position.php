@@ -24,8 +24,8 @@
     <?php
     if (isset($_POST['submit'])) {
         /* mysqli_real_escape_string ป้องกันการโจมตีแบบ SQL Injection (SQL Injection) */
-        $position_name = mysqli_real_escape_string($conn,$_POST['position_name']);
-        $commission_rate = mysqli_real_escape_string($conn,$_POST['commission_rate']);
+        $position_name = mysqli_real_escape_string($conn, $_POST['position_name']);
+        $commission_rate = mysqli_real_escape_string($conn, $_POST['commission_rate']);
         $sql = " INSERT INTO positions VALUES(NULL,'$position_name',$commission_rate) ";
         $result = mysqli_query($conn, $sql);
         if ($result) {
@@ -74,7 +74,7 @@
                             </div>
                         </div>
                     </div>
-                    </ด>
+                </form>
             </div>
             <div class="table-responsive">
                 <table class="table table-striped table-hover table-bordered mt-3 text-nowrap" id="dataTable">
@@ -143,7 +143,7 @@
             }
         });
 
-        function deletePos(position_id,txt) {
+        function deletePos(position_id, txt) {
             Swal.fire({
                 title: `ยืนยันลบ ${txt}?`,
                 icon: "warning",
@@ -160,7 +160,7 @@
                         showConfirmButton: false,
                         timer: 1500
                     }).then(() => {
-                        window.location.href = 'position_delete.php?delete_id='+position_id;
+                        window.location.href = 'position_delete.php?delete_id=' + position_id;
                     })
                 }
             });
