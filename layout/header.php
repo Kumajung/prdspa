@@ -20,9 +20,6 @@
                         <a class="nav-link" href="#"><i class="fa-solid fa-users"></i> พนักงาน</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-coins"></i> การชำระเงิน</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="#"><i class="fa-regular fa-folder"></i> รายงาน</a>
                     </li>
                 </ul>
