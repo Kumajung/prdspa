@@ -28,6 +28,7 @@
                 <?php
 
                 if (isset($_POST['submit'])) {
+                    /* mysqli_real_escape_string ป้องกันการโจมตีแบบ SQL Injection (SQL Injection) */
                     $edit_id = mysqli_real_escape_string($conn, $_POST['edit_id']);
                     $position_name = mysqli_real_escape_string($conn, $_POST['position_name']);
                     $commission_rate = mysqli_real_escape_string($conn, $_POST['commission_rate']);
@@ -54,6 +55,7 @@
                 }
 
                 if (isset($_GET['edit_id'])) {
+                    /* mysqli_real_escape_string ป้องกันการโจมตีแบบ SQL Injection (SQL Injection) */
                     $edit_id = mysqli_real_escape_string($conn, $_GET['edit_id']);
                     $sql = " SELECT * FROM positions WHERE position_id = '$edit_id' ";
                     $result = mysqli_query($conn, $sql);

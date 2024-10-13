@@ -24,9 +24,12 @@
     <?php
     if (isset($_POST['submit'])) {
         /* mysqli_real_escape_string ป้องกันการโจมตีแบบ SQL Injection (SQL Injection) */
-        $position_name = mysqli_real_escape_string($conn,$_POST['position_name']);
-        $commission_rate = mysqli_real_escape_string($conn,$_POST['commission_rate']);
-        $sql = " INSERT INTO positions VALUES(NULL,'$position_name',$commission_rate) ";
+        $first_name = mysqli_real_escape_string($conn, $_POST['first_name']);
+        $last_name = mysqli_real_escape_string($conn, $_POST['last_name']);
+        $telephone = mysqli_real_escape_string($conn, $_POST['telephone']);
+        $salary = mysqli_real_escape_string($conn, $_POST['salary']);
+        $position_id = mysqli_real_escape_string($conn, $_POST['position_id']);
+        $sql = " INSERT INTO employees VALUES(NULL,'$first_name','$last_name','$telephone','$salary','$position_id') ";
         $result = mysqli_query($conn, $sql);
         if ($result) {
     ?>
@@ -46,25 +49,51 @@
     ?>
     <main>
         <div class="container marketing">
-            <h1 class="mb-3 py-5">ข้อมูลการตำแหน่งพนักงาน</h1>
+            <h1 class="mb-3 py-5">ข้อมูลพนักงาน</h1>
             <div class="col-md-6 mx-auto mb-3">
                 <form id="frm" method="POST">
                     <div class="card">
                         <div class="card-header">
                             <!-- employees_type -->
-                            <i class="fa-solid fa-list-check"></i> ส่วนจัดตำแหน่งพนักงาน
+                            <i class="fa-solid fa-users"></i> ส่วนจัดพนักงาน
                         </div>
                         <div class="card-body">
                             <div class="form-group row mb-3">
-                                <label for="position_name" class="col-sm-3 col-form-label">ชื่อประเภทพนักงาน</label>
+                                <label for="first_name" class="col-sm-3 col-form-label">ชื่อ</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="position_name" name="position_name" placeholder="" autocomplete="off" required>
+                                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="" autocomplete="off" required>
                                 </div>
                             </div>
                             <div class="form-group row mb-3">
-                                <label for="commission_rate" class="col-sm-3 col-form-label">คอมมิชชั่น</label>
+                                <label for="last_name" class="col-sm-3 col-form-label">นามสกุล</label>
                                 <div class="col-sm-9">
-                                    <input type="number" class="form-control" id="commission_rate" name="commission_rate" placeholder="" autocomplete="off" required>
+                                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="" autocomplete="off" required>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label for="telephone" class="col-sm-3 col-form-label">เบอร์โทรศัพท์</label>
+                                <div class="col-sm-9">
+                                    <input type="tel" class="form-control" id="telephone" name="telephone" placeholder="" autocomplete="off" required>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label for="salary" class="col-sm-3 col-form-label">เงินเดือน</label>
+                                <div class="col-sm-9">
+                                    <input type="number" step="0.01" class="form-control" id="salary" name="salary" placeholder="" autocomplete="off" required>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label for="position_id" class="col-sm-3 col-form-label">ตำแหน่ง</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" name="position_id" id="position_id">
+                                        <?php
+                                        $sql = " SELECT * FROM positions ORDER BY position_id ASC ";
+                                        $result = mysqli_query($conn, $sql);
+                                        while ($rs = mysqli_fetch_assoc($result)) {
+                                        ?>
+                                            <option value="<?php echo $rs['position_id']; ?>"><?php echo $rs['position_name']; ?></option>
+                                        <?php } ?>
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group row mb-3">
@@ -81,25 +110,29 @@
                     <thead>
                         <tr>
                             <th scope="col" class="text-center">ลำดับ</th>
-                            <th scope="col">ชื่อตำแหน่งพนักงาน</th>
-                            <th class="text-center" scope="col">คอมมิชชั่น</th>
+                            <th scope="col">ชื่อ-นามสกุล</th>
+                            <th class="text-center" scope="col">เบอร์โทรศัพท์</th>
+                            <th class="text-center" scope="col">ตำแหน่ง</th>
+                            <th class="text-center" scope="col">เงินเดือน</th>
                             <th scope="col" class="text-center">จัดการ</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         $no = 1;
-                        $sql_positions = " SELECT * FROM positions ORDER BY position_id ASC ";
-                        $result_positions = mysqli_query($conn, $sql_positions);
-                        while ($rs_positions = mysqli_fetch_assoc($result_positions)) {
+                        $sql_employees = " SELECT employees.*,positions.position_name FROM employees INNER JOIN positions USING(position_id) ORDER BY employees.employee_id ASC ";
+                        $result_employees = mysqli_query($conn, $sql_employees);
+                        while ($rs_employees = mysqli_fetch_assoc($result_employees)) {
                         ?>
                             <tr>
                                 <td class="align-middle text-center"><?php echo $no; ?></td>
-                                <td class="align-middle"><?php echo $rs_positions['position_name']; ?></td>
-                                <td class="align-middle text-center"><?php echo $rs_positions['commission_rate']; ?>%</td>
+                                <td class="align-middle"><?php echo $rs_employees['first_name']; ?>&nbsp;&nbsp;<?php echo $rs_employees['last_name']; ?></td>
+                                <td class="align-middle text-center"><?php echo $rs_employees['telephone']; ?></td>
+                                <td class="align-middle text-center"><?php echo number_format($rs_employees['salary'],2); ?></td>
+                                <td class="align-middle text-center"><?php echo $rs_employees['position_name']; ?></td>
                                 <td class="text-center align-middle">
-                                    <a class="btn btn-warning" href="position_edit.php?edit_id=<?php echo $rs_positions['position_id'] ?>"><i class="fa-regular fa-pen-to-square"></i> แก้ไข</a>
-                                    <button class="btn btn-danger" type="button" onclick="deletePos(<?php echo $rs_positions['position_id'] ?>,'<?php echo $rs_positions['position_name']; ?>')"><i class="fa-solid fa-trash"></i> ลบ</button>
+                                    <a class="btn btn-warning" href="employee_edit.php?edit_id=<?php echo $rs_employees['employee_id'] ?>"><i class="fa-regular fa-pen-to-square"></i> แก้ไข</a>
+                                    <button class="btn btn-danger" type="button" onclick="deletePos(<?php echo $rs_employees['employee_id'] ?>,'<?php echo $rs_employees['first_name']; ?>&nbsp;&nbsp;<?php echo $rs_employees['last_name']; ?>')"><i class="fa-solid fa-trash"></i> ลบ</button>
                                 </td>
                             </tr>
                         <?php
@@ -143,7 +176,7 @@
             }
         });
 
-        function deletePos(position_id,txt) {
+        function deletePos(position_id, txt) {
             Swal.fire({
                 title: `ยืนยันลบ ${txt}?`,
                 icon: "warning",
@@ -160,7 +193,7 @@
                         showConfirmButton: false,
                         timer: 1500
                     }).then(() => {
-                        window.location.href = 'position_delete.php?delete_id='+position_id;
+                        window.location.href = 'employee_delete.php?delete_id=' + position_id;
                     })
                 }
             });

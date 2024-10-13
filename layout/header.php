@@ -21,7 +21,7 @@
                             <i class="fa-solid fa-users"></i> พนักงาน</a>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">ตารางพนักงาน</a></li>
+                            <li><a class="dropdown-item" href="employee.php">ตารางพนักงาน</a></li>
                             <li><a class="dropdown-item" href="position.php">ตารางตำแหน่งพนักงาน</a></li>
                         </ul>
                     </li>
