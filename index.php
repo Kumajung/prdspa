@@ -76,17 +76,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                            
+
                         </tbody>
                     </table>
                 </div>
                 <hr class="featurette-divider">
             </div>
         </div>
-        <!-- Footer -->
-        <?php require './layout/footer.php'; ?>
-        <!-- Footer -->
     </main>
+    <!-- Footer -->
+    <?php require './layout/footer.php'; ?>
+        <!-- Footer -->
     <script src="./dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

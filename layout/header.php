@@ -11,7 +11,7 @@
                         <a class="nav-link" aria-current="page" href="index.php"><i class="fa-solid fa-house"></i> หน้าหลัก</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="service.php"><i class="fa-regular fa-user"></i> ลูกค้า</a>
+                        <a class="nav-link" href="customer.php"><i class="fa-regular fa-user"></i> ลูกค้า</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"><i class="fa-regular fa-pen-to-square"></i> แพ็กเกจ</a>

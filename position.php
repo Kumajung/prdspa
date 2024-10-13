@@ -77,7 +77,7 @@
                     </ด>
             </div>
             <div class="table-responsive">
-                <table class="table table-striped table-hover table-bordered mt-3" id="dataTable">
+                <table class="table table-striped table-hover table-bordered mt-3 text-nowrap" id="dataTable">
                     <thead>
                         <tr>
                             <th scope="col" class="text-center">ลำดับ</th>
