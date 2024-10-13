@@ -82,27 +82,6 @@ CREATE TABLE `employees` (
 -- Table structure for table `payments`
 --
 
--- customer_id (Primary Key): รหัสลูกค้า 
--- first_name: ชื่อ
--- last_name: นามสกุล
--- email: อีเมล
--- phone_number: เบอร์โทรศัพท์
--- address : ที่อยู่ 
--- is_member: สถานะสมาชิก (1 = สมาชิก, 0 = ไม่ใช่สมาชิก)
--- member_date (วันที่ที่เป็นสมาชิก)
-  CREATE TABLE `customers` (
-  `customers` int(11) NOT NULL,
-  `first_name` varchar(150) DEFAULT NULL,
-  `last_name` varchar(150) DEFAULT NULL,
-  `employee_id` int(11) DEFAULT NULL,
-  `email` varchar(50) DEFAULT NULL,
-  `phone_number` varchar(20) DEFAULT NULL,
-  `address` text DEFAULT NULL,
-  `is_member` time DEFAULT NULL,
-  `member_date` timestamp DEFAULT NULL,
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-
 CREATE TABLE `payments` (
   `payment_id` int(11) NOT NULL,
   `appointment_id` int(11) DEFAULT NULL,
