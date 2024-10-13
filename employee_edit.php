@@ -76,7 +76,7 @@
                     <div class="card">
                         <div class="card-header">
                             <!-- employees_type -->
-                            <i class="fa-solid fa-users"></i> ส่วนจัดพนักงาน
+                            <i class="fa-solid fa-users"></i> ส่วนจัดการพนักงาน
                         </div>
                         <div class="card-body">
                             <div class="form-group row mb-3">

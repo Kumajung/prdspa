@@ -20,7 +20,7 @@
     <?php require 'layout/header.php'; ?>
     <main>
         <div class="container marketing">
-            <h1 class="mb-3 py-5">ข้อมูลการบริการ</h1>
+            <h1 class="mb-3 py-5">ข้อมูลบริการ</h1>
             <div class="col-6 mx-auto mb-3">
                 <form id="frm" method="POST">
                     <div class="card">

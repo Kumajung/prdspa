@@ -23,7 +23,7 @@
     <?php require 'layout/header.php'; ?>
     <main>
         <div class="container marketing">
-            <h1 class="mb-3 py-5">ข้อมูลการตำแหน่งพนักงาน</h1>
+            <h1 class="mb-3 py-5">ข้อมูลตำแหน่งพนักงาน</h1>
             <div class="col-md-6 mx-auto mb-3">
                 <?php
 
@@ -71,7 +71,7 @@
                     <div class="card">
                         <div class="card-header">
                             <!-- employees_type -->
-                            <i class="fa-solid fa-list-check"></i> ส่วนจัดตำแหน่งพนักงาน
+                            <i class="fa-solid fa-list-check"></i> ส่วนจัดการตำแหน่งพนักงาน
                         </div>
                         <div class="card-body">
                             <div class="form-group row mb-3">

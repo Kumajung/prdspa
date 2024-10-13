@@ -63,7 +63,7 @@ require 'config/function.php';
                     <div class="card">
                         <div class="card-header">
                             <!-- employees_type -->
-                            <i class="fa-regular fa-user"></i> ส่วนจัดลูกค้า
+                            <i class="fa-regular fa-user"></i> ส่วนจัดการลูกค้า
                         </div>
                         <div class="card-body">
                             <div class="form-group row mb-3">

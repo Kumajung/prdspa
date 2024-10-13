@@ -24,9 +24,8 @@
     <?php
     if (isset($_POST['submit'])) {
         /* mysqli_real_escape_string ป้องกันการโจมตีแบบ SQL Injection (SQL Injection) */
-        $position_name = mysqli_real_escape_string($conn, $_POST['position_name']);
-        $commission_rate = mysqli_real_escape_string($conn, $_POST['commission_rate']);
-        $sql = " INSERT INTO positions VALUES(NULL,'$position_name',$commission_rate) ";
+        $orders_type_name = mysqli_real_escape_string($conn, $_POST['orders_type_name']);
+        $sql = " INSERT INTO orders_type VALUES(NULL,'$orders_type_name') ";
         $result = mysqli_query($conn, $sql);
         if ($result) {
     ?>
@@ -46,25 +45,19 @@
     ?>
     <main>
         <div class="container marketing">
-            <h1 class="mb-3 py-5">ข้อมูลตำแหน่งพนักงาน</h1>
+            <h1 class="mb-3 py-5">ข้อมูลประเภทออเดอร์</h1>
             <div class="col-md-6 mx-auto mb-3">
                 <form id="frm" method="POST">
                     <div class="card">
                         <div class="card-header">
                             <!-- employees_type -->
-                            <i class="fa-solid fa-list-check"></i> ส่วนจัดการตำแหน่งพนักงาน
+                            <i class="fa-solid fa-list-check"></i> ส่วนจัดการประเภทออเดอร์
                         </div>
                         <div class="card-body">
                             <div class="form-group row mb-3">
-                                <label for="position_name" class="col-sm-3 col-form-label">ชื่อประเภทพนักงาน</label>
+                                <label for="orders_type_name" class="col-sm-3 col-form-label">ประเภทออเดอร์</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="position_name" name="position_name" placeholder="" autocomplete="off" required>
-                                </div>
-                            </div>
-                            <div class="form-group row mb-3">
-                                <label for="commission_rate" class="col-sm-3 col-form-label">คอมมิชชั่น</label>
-                                <div class="col-sm-9">
-                                    <input type="number" class="form-control" id="commission_rate" name="commission_rate" placeholder="" autocomplete="off" required>
+                                    <input type="text" class="form-control" id="orders_type_name" name="orders_type_name" placeholder="" autocomplete="off" required>
                                 </div>
                             </div>
                             <div class="form-group row mb-3">
@@ -81,25 +74,23 @@
                     <thead>
                         <tr>
                             <th scope="col" class="text-center">ลำดับ</th>
-                            <th scope="col">ชื่อตำแหน่งพนักงาน</th>
-                            <th class="text-center" scope="col">คอมมิชชั่น</th>
+                            <th scope="col">ประเภทออเดอร์</th>
                             <th scope="col" class="text-center">จัดการ</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         $no = 1;
-                        $sql_positions = " SELECT * FROM positions ORDER BY position_id ASC ";
-                        $result_positions = mysqli_query($conn, $sql_positions);
-                        while ($rs_positions = mysqli_fetch_assoc($result_positions)) {
+                        $sql_ordt = " SELECT * FROM orders_type ORDER BY orders_type_id ASC ";
+                        $result_ordt = mysqli_query($conn, $sql_ordt);
+                        while ($rs_ordt = mysqli_fetch_assoc($result_ordt)) {
                         ?>
                             <tr>
                                 <td class="align-middle text-center"><?php echo $no; ?></td>
-                                <td class="align-middle"><?php echo $rs_positions['position_name']; ?></td>
-                                <td class="align-middle text-center"><?php echo $rs_positions['commission_rate']; ?>%</td>
+                                <td class="align-middle"><?php echo $rs_ordt['orders_type_name']; ?></td>
                                 <td class="text-center align-middle">
-                                    <a class="btn btn-warning" href="position_edit.php?edit_id=<?php echo $rs_positions['position_id'] ?>"><i class="fa-regular fa-pen-to-square"></i> แก้ไข</a>
-                                    <button class="btn btn-danger" type="button" onclick="deletePos(<?php echo $rs_positions['position_id'] ?>,'<?php echo $rs_positions['position_name']; ?>')"><i class="fa-solid fa-trash"></i> ลบ</button>
+                                    <a class="btn btn-warning" href="order_type_edit.php?edit_id=<?php echo $rs_ordt['orders_type_id'] ?>"><i class="fa-regular fa-pen-to-square"></i> แก้ไข</a>
+                                    <button class="btn btn-danger" type="button" onclick="deletePos(<?php echo $rs_ordt['orders_type_id'] ?>,'<?php echo $rs_ordt['orders_type_name']; ?>')"><i class="fa-solid fa-trash"></i> ลบ</button>
                                 </td>
                             </tr>
                         <?php
@@ -143,7 +134,7 @@
             }
         });
 
-        function deletePos(position_id, txt) {
+        function deletePos(orders_type_id, txt) {
             Swal.fire({
                 title: `ยืนยันลบ ${txt}?`,
                 icon: "warning",
@@ -160,7 +151,7 @@
                         showConfirmButton: false,
                         timer: 1500
                     }).then(() => {
-                        window.location.href = 'position_delete.php?delete_id=' + position_id;
+                        window.location.href = 'order_type_delete.php?delete_id=' + orders_type_id;
                     })
                 }
             });

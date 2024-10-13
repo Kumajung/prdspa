@@ -1,20 +1,26 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Spa</a>
+            <a class="navbar-brand" href="index.php"><i class="fa-solid fa-spa"></i> Spa</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="index.php"><i class="fa-solid fa-house"></i> หน้าหลัก</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-regular fa-rectangle-list"></i> ออเดอร์</a>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="index.php">ออเดอร์</a></li>
+                            <li><a class="dropdown-item" href="order_type.php">ประเภทออเดอร์</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="customer.php"><i class="fa-regular fa-user"></i> ลูกค้า</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa-regular fa-pen-to-square"></i> แพ็กเกจ</a>
+                        <a class="nav-link" href="package.php"><i class="fa-solid fa-gift"></i> แพ็กเกจ</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
