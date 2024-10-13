@@ -144,7 +144,7 @@ require 'config/function.php';
                                 <td class="align-middle"><?php echo $rs_customer['first_name']; ?>&nbsp;&nbsp;<?php echo $rs_customer['last_name']; ?></td>
                                 <td class="align-middle text-center"><?php echo $rs_customer['email']; ?></td>
                                 <td class="align-middle text-center"><?php echo $rs_customer['phone_number']; ?></td>
-                                <td class="align-middle text-center"><?php echo nl2br($rs_customer['address']); ?></td>
+                                <td class="align-middle text-start"><?php echo nl2br($rs_customer['address']); ?></td>
                                 <td class="align-middle text-center"><?php echo $member_array[$rs_customer['is_member']]; ?></td>
                                 <td class="align-middle text-center">
                                     <?php
