@@ -23,8 +23,9 @@
     <?php require 'layout/header.php'; ?>
     <?php
     if (isset($_POST['submit'])) {
-        $position_name = $_POST['position_name'];
-        $sql = " INSERT INTO positions VALUES(NULL,'$position_name') ";
+        $position_name = mysqli_real_escape_string($conn,$_POST['position_name']);
+        $commission_rate = mysqli_real_escape_string($conn,$_POST['commission_rate']);
+        $sql = " INSERT INTO positions VALUES(NULL,'$position_name',$commission_rate) ";
         $result = mysqli_query($conn, $sql);
         if ($result) {
     ?>
@@ -60,6 +61,12 @@
                                 </div>
                             </div>
                             <div class="form-group row mb-3">
+                                <label for="commission_rate" class="col-sm-3 col-form-label">คอมมิชชั่น</label>
+                                <div class="col-sm-9">
+                                    <input type="number" class="form-control" id="commission_rate" name="commission_rate" placeholder="" autocomplete="off" required>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
                                 <div class="offset-sm-3 col-sm-6 d-grid">
                                     <button type="submit" name="submit" class="btn btn-primary"><i class="fa-regular fa-floppy-disk"></i> บันทึก</button>
                                 </div>
@@ -69,11 +76,12 @@
                     </ด>
             </div>
             <div class="table-responsive">
-                <table class="table table-striped table-hover table-bordered mt-3" id="example">
+                <table class="table table-striped table-hover table-bordered mt-3" id="dataTable">
                     <thead>
                         <tr>
                             <th scope="col" class="text-center">ลำดับ</th>
                             <th scope="col">ชื่อตำแหน่งพนักงาน</th>
+                            <th class="text-center" scope="col">คอมมิชชั่น</th>
                             <th scope="col" class="text-center">จัดการ</th>
                         </tr>
                     </thead>
@@ -87,6 +95,7 @@
                             <tr>
                                 <td class="align-middle text-center"><?php echo $no; ?></td>
                                 <td class="align-middle"><?php echo $rs_positions['position_name']; ?></td>
+                                <td class="align-middle text-center"><?php echo $rs_positions['commission_rate']; ?>%</td>
                                 <td class="text-center align-middle">
                                     <a class="btn btn-warning" href="position_edit.php?edit_id=<?php echo $rs_positions['position_id'] ?>"><i class="fa-regular fa-pen-to-square"></i> แก้ไข</a>
                                     <button class="btn btn-danger" type="button" onclick="deletePos(<?php echo $rs_positions['position_id'] ?>,'<?php echo $rs_positions['position_name']; ?>')"><i class="fa-solid fa-trash"></i> ลบ</button>
@@ -107,7 +116,31 @@
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
     <script>
-        $('#example').DataTable();
+        $('#dataTable').DataTable({
+            "oLanguage": {
+                "sEmptyTable": "ไม่มีข้อมูลในตาราง",
+                "sInfo": "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
+                "sInfoEmpty": "แสดง 0 ถึง 0 จาก 0 แถว",
+                "sInfoFiltered": "(กรองข้อมูล _MAX_ ทุกแถว)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ",",
+                "sLengthMenu": "แสดง _MENU_ แถว",
+                "sLoadingRecords": "กำลังโหลดข้อมูล...",
+                "sProcessing": "กำลังดำเนินการ...",
+                "sSearch": "ค้นหา: ",
+                "sZeroRecords": "ไม่พบข้อมูล",
+                "oPaginate": {
+                    "sFirst": "หน้าแรก",
+                    "sPrevious": "ก่อนหน้า",
+                    "sNext": "ถัดไป",
+                    "sLast": "หน้าสุดท้าย"
+                },
+                "oAria": {
+                    "sSortAscending": ": เปิดใช้งานการเรียงข้อมูลจากน้อยไปมาก",
+                    "sSortDescending": ": เปิดใช้งานการเรียงข้อมูลจากมากไปน้อย"
+                }
+            }
+        });
 
         function deletePos(position_id,txt) {
             Swal.fire({

@@ -19,10 +19,10 @@
 - CRUD positions
 
 5. ตารางออเดอร์ (orders)
-- CRUD positions
+- CR orders
 
 6. ตารางรายละเอียดออเดอร์ (orders_detail)
-- CRUD orders_detail
+- CR only orders_detail
 
 7. ตารางประเภทออเดอร์ (orders_type)
 - CRUD orders_type
