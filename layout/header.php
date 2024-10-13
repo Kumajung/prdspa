@@ -22,7 +22,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#">ตารางพนักงาน</a></li>
-                            <li><a class="dropdown-item" href="#">ตารางตำแหน่ง</a></li>
+                            <li><a class="dropdown-item" href="position.php">ตารางตำแหน่งพนักงาน</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
