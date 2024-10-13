@@ -49,13 +49,13 @@
     ?>
     <main>
         <div class="container marketing">
-            <h1 class="mb-3 py-5">ข้อมูลพนักงาน</h1>
+            <h1 class="mb-3 py-5">ข้อมูลลูกค้า</h1>
             <div class="col-md-6 mx-auto mb-3">
                 <form id="frm" method="POST">
                     <div class="card">
                         <div class="card-header">
                             <!-- employees_type -->
-                            <i class="fa-solid fa-users"></i> ส่วนจัดพนักงาน
+                            <i class="fa-regular fa-user"></i> ส่วนจัดลูกค้า
                         </div>
                         <div class="card-body">
                             <div class="form-group row mb-3">

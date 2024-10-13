@@ -1,5 +1,5 @@
 CREATE TABLE `customers` (
-  `customers` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'รหัสลูกค้า',
+  `customer_id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'รหัสลูกค้า',
   `first_name` varchar(150) DEFAULT NULL COMMENT 'ชื่อ',
   `last_name` varchar(150) DEFAULT NULL COMMENT 'นามสกุล',
   `email` varchar(50) DEFAULT NULL COMMENT 'อีเมล',
