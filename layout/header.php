@@ -19,8 +19,14 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#"><i class="fa-solid fa-users"></i> พนักงาน</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa-regular fa-folder"></i> รายงาน</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-regular fa-folder"></i> รายงาน</a>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">รายงาน 1</a></li>
+                            <li><a class="dropdown-item" href="#">รายงาน 2</a></li>                            
+                        </ul>
                     </li>
                 </ul>
                 <form class="d-flex" role="search">
