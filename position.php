@@ -13,6 +13,7 @@
     <!-- Custom styles for this template -->
     <link href="dist/css/carousel.css" rel="stylesheet">
     <link href="dist/css/stlye.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -44,7 +45,7 @@
     <main>
         <div class="container marketing">
             <h1 class="mb-3 py-5">ข้อมูลการลูกค้า</h1>
-            <div class="col-6 mx-auto mb-3">
+            <div class="col-md-6 mx-auto mb-3">
                 <form id="frm" method="POST">
                     <div class="card">
                         <div class="card-header">
@@ -68,7 +69,7 @@
                     </ด>
             </div>
             <div class="table-responsive">
-                <table class="table table-striped table-hover table-bordered mt-3">
+                <table class="table table-striped table-hover table-bordered mt-3" id="example">
                     <thead>
                         <tr>
                             <th scope="col" class="text-center">ลำดับ</th>
@@ -100,6 +101,14 @@
         <?php require './layout/footer.php'; ?>
     </main>
     <script src="./dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+    <script>
+        $('#example').DataTable();
+    </script>
+    
+
+
 </body>
 
 </html>
