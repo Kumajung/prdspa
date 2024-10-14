@@ -50,7 +50,7 @@
     <main>
         <div class="container marketing">
             <h1 class="mb-3 py-5">ข้อมูลออเดอร์</h1>
-            <div class="col-md-6 mx-auto mb-3">
+            <div class="col-md-12 mx-auto mb-3">
                 <form id="frm" method="POST">
                     <div class="card">
                         <div class="card-header">
@@ -58,47 +58,96 @@
                             <i class="fa-regular fa-rectangle-list"></i> ส่วนจัดการออเดอร์
                         </div>
                         <div class="card-body">
+
                             <div class="form-group row mb-3">
-                                <label for="first_name" class="col-sm-3 col-form-label">ชื่อ</label>
+                                <label for="last_name" class="col-sm-3 col-form-label">ลูกค้า</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="" autocomplete="off" required>
-                                </div>
-                            </div>
-                            <div class="form-group row mb-3">
-                                <label for="last_name" class="col-sm-3 col-form-label">นามสกุล</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="" autocomplete="off" required>
-                                </div>
-                            </div>
-                            <div class="form-group row mb-3">
-                                <label for="telephone" class="col-sm-3 col-form-label">เบอร์โทรศัพท์</label>
-                                <div class="col-sm-9">
-                                    <input type="tel" class="form-control" id="telephone" name="telephone" placeholder="" autocomplete="off" required>
-                                </div>
-                            </div>
-                            <div class="form-group row mb-3">
-                                <label for="salary" class="col-sm-3 col-form-label">เงินเดือน</label>
-                                <div class="col-sm-9">
-                                    <input type="number" step="0.01" class="form-control" id="salary" name="salary" placeholder="" autocomplete="off" required>
-                                </div>
-                            </div>
-                            <div class="form-group row mb-3">
-                                <label for="position_id" class="col-sm-3 col-form-label">ตำแหน่ง</label>
-                                <div class="col-sm-9">
+                                    <?php
+                                    $member_array = ['ลูกค้าไม่เป็นสมาชิก', 'ลูกค้าสมาชิก'];
+                                    ?>
                                     <select class="form-control" name="position_id" id="position_id">
+                                        <option value="">เลือกลูกค้า</option>
                                         <?php
-                                        $sql = " SELECT * FROM positions ORDER BY position_id ASC ";
+                                        $sql = " SELECT * FROM customers ORDER BY customer_id ASC ";
                                         $result = mysqli_query($conn, $sql);
                                         while ($rs = mysqli_fetch_assoc($result)) {
                                         ?>
-                                            <option value="<?php echo $rs['position_id']; ?>"><?php echo $rs['position_name']; ?></option>
+                                            <option value="<?php echo $rs['customer_id']; ?>"><?php echo $rs['first_name']; ?>&nbsp;&nbsp;<?php echo $rs['last_name']; ?>&nbsp;(<?php echo $member_array[$rs['is_member']]; ?>)</option>
                                         <?php } ?>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group row mb-3">
-                                <div class="offset-sm-3 col-sm-6 d-grid">
-                                    <button type="submit" name="submit" class="btn btn-primary"><i class="fa-regular fa-floppy-disk"></i> บันทึก</button>
+                                <label for="telephone" class="col-sm-3 col-form-label">พนักงาน</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" name="customer_id" id="customer_id">
+                                        <option value="">เลือกพนักงาน</option>
+                                        <?php
+                                        $sql = " SELECT * FROM employees ORDER BY employee_id ASC ";
+                                        $result = mysqli_query($conn, $sql);
+                                        while ($rs = mysqli_fetch_assoc($result)) {
+                                        ?>
+                                            <option value="<?php echo $rs['employee_id']; ?>"><?php echo $rs['first_name']; ?>&nbsp;&nbsp;<?php echo $rs['last_name']; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label for="telephone" class="col-sm-3 col-form-label">ประเภทออเดอร์</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" name="orders_type_id" id="orders_type_id">
+                                        <option value="">เลือกประเภทออเดอร์</option>
+                                        <?php
+                                        $sql = " SELECT * FROM orders_type ORDER BY orders_type_id ASC ";
+                                        $result = mysqli_query($conn, $sql);
+                                        while ($rs = mysqli_fetch_assoc($result)) {
+                                        ?>
+                                            <option value="<?php echo $rs['orders_type_id']; ?>"><?php echo $rs['orders_type_name']; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label for="telephone" class="col-sm-3 col-form-label">รายการ</label>
+                                <div class="col-sm-9">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-sm table-hover table-striped text-nowrap">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center align-middle">#</th>
+                                                    <th class="text-center align-middle">แพ็กเกจ</th>
+                                                    <th class="text-center align-middle">ราคาปกติ</th>
+                                                    <th class="text-center align-middle">ราคาขาย</th>
+                                                    <th class="text-center align-middle">จำนวน</th>
+                                                    <th class="text-center align-middle">จัดการ</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="align-middle text-center">1</td>
+                                                    <td class="align-middle"><input type="text" class="form-control" name="student_code[]" value="" autocomplete="off"></td>
+                                                    <td class="align-middle"><input type="text" class="form-control" name="student_code[]" value="" autocomplete="off"></td>
+                                                    <td class="align-middle">
+                                                        <input type="text" class="form-control" name="student_firstname[]" value="" autocomplete="off">
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        <input type="text" class="form-control" name="student_lastname[]" value="" autocomplete="off">
+                                                    </td>
+                                                    <td class="align-middle text-center">
+                                                        <button class="btn btn-sm btn-success btn-adds" type="button"><i class="fas fa-plus"></i></button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mb-3">
+                                <div class="offset-sm-3 col-sm-6">
+                                    <button type="submit" class="btn btn-primary" name="submit"><i class="far fa-save"></i> บันทึกข้อมูล</button>
+                                    <button type="reset" class="btn btn-warning re_frm"><i class="fas fa-redo"></i> รีเซ็ท</button>
+                                    <a href="index.php" class="btn btn-dark" name="back"><i class="fas fa-step-backward"></i> ย้อนกลับ</a>
                                 </div>
                             </div>
                         </div>

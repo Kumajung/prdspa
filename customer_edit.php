@@ -118,7 +118,7 @@ require 'config/function.php';
                             <div class="form-group row mb-3">
                                 <label for="address" class="col-sm-3 col-form-label">ที่อยู่</label>
                                 <div class="col-sm-9">
-                                    <textarea class="form-control" name="address" id="address"><?php echo $rs_edit['address']; ?></textarea>
+                                    <textarea class="form-control" name="address" id="address" rows="5"><?php echo $rs_edit['address']; ?></textarea>
                                 </div>
                             </div>
                             <div class="form-group row mb-3">
@@ -139,9 +139,11 @@ require 'config/function.php';
                                 </div>
                             </div>
                             <div class="form-group row mb-3">
-                                <div class="offset-sm-3 col-sm-6 d-grid">
+                                <div class="offset-sm-3 col-sm-9">
                                     <input type="hidden" name="edit_id" value="<?php echo $rs_edit['customer_id']; ?>">
-                                    <button type="submit" name="submit" class="btn btn-warning"><i class="fa-regular fa-floppy-disk"></i> แก้ไข</button>
+                                    <button type="submit" class="btn btn-primary" name="submit"><i class="far fa-save"></i> บันทึกข้อมูล</button>
+                                    <button type="reset" class="btn btn-warning re_frm"><i class="fas fa-redo"></i> รีเซ็ท</button>
+                                    <a href="customer.php" class="btn btn-dark" name="back"><i class="fas fa-step-backward"></i> ย้อนกลับ</a>
                                 </div>
                             </div>
                         </div>

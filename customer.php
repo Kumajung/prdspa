@@ -93,7 +93,7 @@ require 'config/function.php';
                             <div class="form-group row mb-3">
                                 <label for="address" class="col-sm-3 col-form-label">ที่อยู่</label>
                                 <div class="col-sm-9">
-                                    <textarea class="form-control" name="address" id="address"></textarea>
+                                    <textarea class="form-control" name="address" id="address" rows="5"></textarea>
                                 </div>
                             </div>
                             <div class="form-group row mb-3">
@@ -102,7 +102,8 @@ require 'config/function.php';
                                     <?php
                                     $member_array = ['ลูกค้าไม่เป็นสมาชิก', 'ลูกค้าสมาชิก'];
                                     ?>
-                                    <select class="form-control" name="is_member" id="is_member">
+                                    <select class="form-control" name="is_member" id="is_member" required>
+                                        <option value="">เลือกประเภทสมาชิก</option>
                                         <?php for ($i = 0; $i < count($member_array); $i++) { ?>
                                             <option value="<?php echo $i; ?>"><?php echo $member_array[$i]; ?></option>
                                         <?php } ?>
@@ -110,8 +111,9 @@ require 'config/function.php';
                                 </div>
                             </div>
                             <div class="form-group row mb-3">
-                                <div class="offset-sm-3 col-sm-6 d-grid">
-                                    <button type="submit" name="submit" class="btn btn-primary"><i class="fa-regular fa-floppy-disk"></i> บันทึก</button>
+                                <div class="offset-sm-3 col-sm-9">
+                                    <button type="submit" class="btn btn-primary" name="submit"><i class="far fa-save"></i> บันทึกข้อมูล</button>
+                                    <button type="reset" class="btn btn-warning re_frm"><i class="fas fa-redo"></i> รีเซ็ท</button>
                                 </div>
                             </div>
                         </div>

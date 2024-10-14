@@ -85,7 +85,8 @@
                             <div class="form-group row mb-3">
                                 <label for="position_id" class="col-sm-3 col-form-label">ตำแหน่ง</label>
                                 <div class="col-sm-9">
-                                    <select class="form-control" name="position_id" id="position_id">
+                                    <select class="form-control" name="position_id" id="position_id" required>
+                                        <option value="">เลือกตำแหน่ง</option>
                                         <?php
                                         $sql = " SELECT * FROM positions ORDER BY position_id ASC ";
                                         $result = mysqli_query($conn, $sql);
@@ -97,13 +98,14 @@
                                 </div>
                             </div>
                             <div class="form-group row mb-3">
-                                <div class="offset-sm-3 col-sm-6 d-grid">
-                                    <button type="submit" name="submit" class="btn btn-primary"><i class="fa-regular fa-floppy-disk"></i> บันทึก</button>
+                                <div class="offset-sm-3 col-sm-9">
+                                    <button type="submit" class="btn btn-primary" name="submit"><i class="far fa-save"></i> บันทึกข้อมูล</button>
+                                    <button type="reset" class="btn btn-warning re_frm"><i class="fas fa-redo"></i> รีเซ็ท</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    </form>
+                </form>
             </div>
             <div class="table-responsive">
                 <table class="table table-striped table-hover table-bordered mt-3 text-nowrap" id="dataTable">
@@ -128,7 +130,7 @@
                                 <td class="align-middle text-center"><?php echo $no; ?></td>
                                 <td class="align-middle"><?php echo $rs_employees['first_name']; ?>&nbsp;&nbsp;<?php echo $rs_employees['last_name']; ?></td>
                                 <td class="align-middle text-center"><?php echo $rs_employees['telephone']; ?></td>
-                                <td class="align-middle text-center"><?php echo number_format($rs_employees['salary'],2); ?></td>
+                                <td class="align-middle text-center"><?php echo number_format($rs_employees['salary'], 2); ?></td>
                                 <td class="align-middle text-center"><?php echo $rs_employees['position_name']; ?></td>
                                 <td class="text-center align-middle">
                                     <a class="btn btn-warning" href="employee_edit.php?edit_id=<?php echo $rs_employees['employee_id'] ?>"><i class="fa-regular fa-pen-to-square"></i> แก้ไข</a>

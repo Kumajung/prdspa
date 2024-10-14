@@ -24,8 +24,9 @@
     <?php
     if (isset($_POST['submit'])) {
         /* mysqli_real_escape_string ป้องกันการโจมตีแบบ SQL Injection (SQL Injection) */
+        $edit_id = mysqli_real_escape_string($conn, $_POST['edit_id']);
         $orders_type_name = mysqli_real_escape_string($conn, $_POST['orders_type_name']);
-        $sql = " INSERT INTO orders_type VALUES(NULL,'$orders_type_name') ";
+        $sql = " UPDATE orders_type SET orders_type_name = '$orders_type_name' WHERE orders_type_id = '$edit_id' ";
         $result = mysqli_query($conn, $sql);
         if ($result) {
     ?>
@@ -36,11 +37,25 @@
                         title: 'บันทึกข้อมูลสำเร็จ',
                         showConfirmButton: false,
                         timer: 1500
-                    })
+                    }).then(() => {
+                        window.location.href = 'order_type.php';
+                    });
                 })
             </script>
     <?php
         }
+    }
+
+    if (isset($_GET['edit_id'])) {
+        $edit_id = mysqli_real_escape_string($conn, $_GET['edit_id']);
+        $sql = " SELECT * FROM orders_type WHERE orders_type_id = '$edit_id' ";
+        $result = mysqli_query($conn, $sql);
+        $num = mysqli_num_rows($result);
+        if ($num === 0) {
+            header("Location:order_type.php");
+            exit;
+        }
+        $rs = mysqli_fetch_assoc($result);
     }
     ?>
     <main>
@@ -57,12 +72,15 @@
                             <div class="form-group row mb-3">
                                 <label for="orders_type_name" class="col-sm-3 col-form-label">ประเภทออเดอร์</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="orders_type_name" name="orders_type_name" placeholder="" autocomplete="off" required>
+                                    <input type="text" class="form-control" id="orders_type_name" name="orders_type_name" value="<?php echo $rs['orders_type_name']; ?>" autocomplete="off" required>
                                 </div>
                             </div>
                             <div class="form-group row mb-3">
-                                <div class="offset-sm-3 col-sm-6 d-grid">
-                                    <button type="submit" name="submit" class="btn btn-warning"><i class="fa-regular fa-floppy-disk"></i> บันทึก</button>
+                                <div class="offset-sm-3 col-sm-9">
+                                    <input type="hidden" name="edit_id" value="<?php echo $rs['orders_type_id']; ?>">
+                                    <button type="submit" class="btn btn-primary" name="submit"><i class="far fa-save"></i> บันทึกข้อมูล</button>
+                                    <button type="reset" class="btn btn-warning re_frm"><i class="fas fa-redo"></i> รีเซ็ท</button>
+                                    <a href="order_type.php" class="btn btn-dark" name="back"><i class="fas fa-step-backward"></i> ย้อนกลับ</a>
                                 </div>
                             </div>
                         </div>

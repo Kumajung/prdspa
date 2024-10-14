@@ -87,9 +87,11 @@
                                 </div>
                             </div>
                             <div class="form-group row mb-3">
-                                <div class="offset-sm-3 col-sm-6 d-grid">
+                                <div class="offset-sm-3 col-sm-9">
                                     <input type="hidden" name="edit_id" value="<?php echo $edit_id; ?>">
-                                    <button type="submit" name="submit" class="btn btn-warning"><i class="fa-regular fa-pen-to-square"></i> แก้ไข</button>
+                                    <button type="submit" class="btn btn-primary" name="submit"><i class="far fa-save"></i> บันทึกข้อมูล</button>
+                                    <button type="reset" class="btn btn-warning re_frm"><i class="fas fa-redo"></i> รีเซ็ท</button>
+                                    <a href="position.php" class="btn btn-dark" name="back"><i class="fas fa-step-backward"></i> ย้อนกลับ</a>
                                 </div>
                             </div>
                         </div>
