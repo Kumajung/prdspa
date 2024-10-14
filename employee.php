@@ -112,6 +112,11 @@
                     </div>
                 </form>
             </div>
+            <div class="col-lg-12 container">
+                <div class="alert alert-info" role="alert">
+                    <i class="fa-solid fa-circle-info"></i> พนักงานหากมีการใช้งานจะไม่สามารถลบได้
+                </div>
+            </div>
             <div class="table-responsive">
                 <table class="table table-striped table-hover table-bordered mt-3 text-nowrap" id="dataTable">
                     <thead>
@@ -127,9 +132,14 @@
                     <tbody>
                         <?php
                         $no = 1;
-                        $sql_employees = " SELECT employees.*,positions.position_name FROM employees INNER JOIN positions USING(position_id) ORDER BY employees.employee_id ASC ";
+                        $sql_employees = " SELECT employees.*,positions.position_name,(SELECT COUNT(orders.orders_id) FROM orders WHERE orders.employee_id = employees.employee_id) AS 'count_ord' FROM employees INNER JOIN positions USING(position_id) ORDER BY employees.employee_id ASC ";
                         $result_employees = mysqli_query($conn, $sql_employees);
                         while ($rs_employees = mysqli_fetch_assoc($result_employees)) {
+                            if ($rs_employees['count_ord'] > 0) {
+                                $atv = "disabled";
+                            } else {
+                                $atv = "";
+                            }
                         ?>
                             <tr>
                                 <td class="align-middle text-center"><?php echo $no; ?></td>
@@ -139,7 +149,7 @@
                                 <td class="align-middle text-center"><?php echo $rs_employees['position_name']; ?></td>
                                 <td class="text-center align-middle">
                                     <a class="btn btn-warning" href="employee_edit.php?edit_id=<?php echo $rs_employees['employee_id'] ?>"><i class="fa-regular fa-pen-to-square"></i> แก้ไข</a>
-                                    <button class="btn btn-danger" type="button" onclick="deletePos(<?php echo $rs_employees['employee_id'] ?>,'<?php echo $rs_employees['first_name']; ?>&nbsp;&nbsp;<?php echo $rs_employees['last_name']; ?>')"><i class="fa-solid fa-trash"></i> ลบ</button>
+                                    <button <?=$atv?> class="btn btn-danger" type="button" onclick="deletePos(<?php echo $rs_employees['employee_id'] ?>,'<?php echo $rs_employees['first_name']; ?>&nbsp;&nbsp;<?php echo $rs_employees['last_name']; ?>')"><i class="fa-solid fa-trash"></i> ลบ</button>
                                 </td>
                             </tr>
                         <?php

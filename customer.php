@@ -125,6 +125,11 @@ require 'config/function.php';
                     </div>
                 </form>
             </div>
+            <div class="col-lg-12 container">
+                <div class="alert alert-info" role="alert">
+                    <i class="fa-solid fa-circle-info"></i> ลูกค้าหากมีการใช้งานจะไม่สามารถลบได้
+                </div>
+            </div>
             <div class="table-responsive">
                 <table class="table table-striped table-hover table-bordered mt-3 text-nowrap" id="dataTable">
                     <thead>
@@ -142,9 +147,14 @@ require 'config/function.php';
                     <tbody>
                         <?php
                         $no = 1;
-                        $sql_customer = " SELECT * FROM customers ORDER BY customer_id ASC ";
+                        $sql_customer = " SELECT *,(SELECT COUNT(orders.orders_id) FROM orders WHERE orders.customer_id = customers.customer_id) AS 'count_ord' FROM customers ORDER BY customer_id ASC ";
                         $result_customer = mysqli_query($conn, $sql_customer);
                         while ($rs_customer = mysqli_fetch_assoc($result_customer)) {
+                            if ($rs_customer['count_ord'] > 0) {
+                                $atv = "disabled";
+                            } else {
+                                $atv = "";
+                            }
                         ?>
                             <tr>
                                 <td class="align-middle text-center"><?php echo $no; ?></td>
@@ -164,7 +174,7 @@ require 'config/function.php';
                                 </td>
                                 <td class="text-center align-middle">
                                     <a class="btn btn-warning" href="customer_edit.php?edit_id=<?php echo $rs_customer['customer_id'] ?>"><i class="fa-regular fa-pen-to-square"></i> แก้ไข</a>
-                                    <button class="btn btn-danger" type="button" onclick="deletePos(<?php echo $rs_customer['customer_id'] ?>,'<?php echo $rs_customer['first_name']; ?>&nbsp;&nbsp;<?php echo $rs_customer['last_name']; ?>')"><i class="fa-solid fa-trash"></i> ลบ</button>
+                                    <button <?=$atv?> class="btn btn-danger" type="button" onclick="deletePos(<?php echo $rs_customer['customer_id'] ?>,'<?php echo $rs_customer['first_name']; ?>&nbsp;&nbsp;<?php echo $rs_customer['last_name']; ?>')"><i class="fa-solid fa-trash"></i> ลบ</button>
                                 </td>
                             </tr>
                         <?php

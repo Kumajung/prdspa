@@ -95,9 +95,14 @@
                     <tbody>
                         <?php
                         $no = 1;
-                        $sql_positions = " SELECT * FROM positions ORDER BY position_id ASC ";
+                        $sql_positions = " SELECT *,(SELECT COUNT(employees.employee_id) FROM employees WHERE employees.position_id = positions.position_id) AS 'count_ord' FROM positions ORDER BY position_id ASC ";
                         $result_positions = mysqli_query($conn, $sql_positions);
                         while ($rs_positions = mysqli_fetch_assoc($result_positions)) {
+                            if ($rs_positions['count_ord'] > 0) {
+                                $atv = "disabled";
+                            } else {
+                                $atv = "";
+                            }
                         ?>
                             <tr>
                                 <td class="align-middle text-center"><?php echo $no; ?></td>
@@ -105,7 +110,7 @@
                                 <td class="align-middle text-center"><?php echo $rs_positions['commission_rate']; ?>%</td>
                                 <td class="text-center align-middle">
                                     <a class="btn btn-warning" href="position_edit.php?edit_id=<?php echo $rs_positions['position_id'] ?>"><i class="fa-regular fa-pen-to-square"></i> แก้ไข</a>
-                                    <button class="btn btn-danger" type="button" onclick="deletePos(<?php echo $rs_positions['position_id'] ?>,'<?php echo $rs_positions['position_name']; ?>')"><i class="fa-solid fa-trash"></i> ลบ</button>
+                                    <button <?=$atv?> class="btn btn-danger" type="button" onclick="deletePos(<?php echo $rs_positions['position_id'] ?>,'<?php echo $rs_positions['position_name']; ?>')"><i class="fa-solid fa-trash"></i> ลบ</button>
                                 </td>
                             </tr>
                         <?php

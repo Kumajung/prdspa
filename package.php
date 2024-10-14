@@ -85,6 +85,11 @@ require 'config/function.php';
                     </div>
                 </form>
             </div>
+            <div class="col-lg-12 container">
+                <div class="alert alert-info" role="alert">
+                    <i class="fa-solid fa-circle-info"></i> แพ็กเกจหากมีการใช้งานจะไม่สามารถลบได้
+                </div>
+            </div>
             <div class="table-responsive">
                 <table class="table table-striped table-hover table-bordered mt-3 text-nowrap" id="dataTable">
                     <thead>
@@ -98,9 +103,14 @@ require 'config/function.php';
                     <tbody>
                         <?php
                         $no = 1;
-                        $sql_package = " SELECT * FROM packages ORDER BY package_id ASC ";
+                        $sql_package = " SELECT *,(SELECT COUNT(orders_detail.orders_detail_id) FROM orders_detail WHERE orders_detail.package_id = packages.package_id) AS 'count_ord' FROM packages ORDER BY package_id ASC ";
                         $result_package = mysqli_query($conn, $sql_package);
                         while ($rs_package = mysqli_fetch_assoc($result_package)) {
+                            if ($rs_package['count_ord'] > 0) {
+                                $atv = "disabled";
+                            } else {
+                                $atv = "";
+                            }
                         ?>
                             <tr>
                                 <td class="align-middle text-center"><?php echo $no; ?></td>
@@ -108,7 +118,7 @@ require 'config/function.php';
                                 <td class="align-middle"><?php echo number_format($rs_package['price'],2); ?></td>
                                 <td class="text-center align-middle">
                                     <a class="btn btn-warning" href="package_edit.php?edit_id=<?php echo $rs_package['package_id'] ?>"><i class="fa-regular fa-pen-to-square"></i> แก้ไข</a>
-                                    <button class="btn btn-danger" type="button" onclick="deletePos(<?php echo $rs_package['package_id'] ?>,'<?php echo $rs_package['package_name']; ?>')"><i class="fa-solid fa-trash"></i> ลบ</button>
+                                    <button <?=$atv?> class="btn btn-danger" type="button" onclick="deletePos(<?php echo $rs_package['package_id'] ?>,'<?php echo $rs_package['package_name']; ?>')"><i class="fa-solid fa-trash"></i> ลบ</button>
                                 </td>
                             </tr>
                         <?php
