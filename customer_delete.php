@@ -6,6 +6,10 @@ if(isset($_GET['delete_id'])){
     $result_delete = mysqli_query($conn,$sql_delete);
     if($result_delete){
         header("location:customer.php");
+        exit;
     }
+}else{
+    header("location:customer.php");
+    exit;
 }
 ?>

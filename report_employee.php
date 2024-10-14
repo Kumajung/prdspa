@@ -31,7 +31,7 @@ require 'config/function.php';
     <?php require 'layout/header.php'; ?>
     <main>
         <div class="container marketing">
-            <h1 class="mb-3 py-5 text-center">รายงานแพ็กเกจ</h1>
+            <h1 class="mb-3 py-5 text-center">รายงานพนักงาน</h1>
             <div class="col-md-12">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
@@ -51,30 +51,46 @@ require 'config/function.php';
                                 <thead>
                                     <tr>
                                         <th class="text-center">ประจำวัน</th>
-                                        <th class="text-start">แพ็กเกจ</th>
-                                        <th class="text-center">จำนวน (ครั้ง)</th>
+                                        <th class="text-center">ชื่อ-นามสกุล</th>
+                                        <th class="text-center">ตำแหน่ง</th>
+                                        <th class="text-center">รายได้ต่อวัน (เงินเดือน/30)</th>
+                                        <th class="text-center">ค่าคอมมิจชั่น (บาท)</th>
+                                        <th class="text-center">รวม (บาท)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     $total_day = 0;
-                                    $sql_cday = " SELECT DATE_FORMAT(orders.sale_date,'%Y-%m-%d') AS 'p_days',packages.package_name,COUNT(orders_detail.package_id) AS 'p_nums' FROM orders 
-                                                INNER JOIN orders_detail USING(orders_id)
-                                                INNER JOIN packages USING(package_id)
-                                                GROUP BY p_days,packages.package_name ORDER BY p_days ASC";
+                                    $total_sl1 = 0;
+                                    $total_sl2 = 0;
+                                    $sql_cday = " SELECT DATE_FORMAT(orders.sale_date,'%Y-%m-%d') AS 'p_days',
+                                                employees.first_name,employees.last_name,positions.position_name,employees.salary,
+                                                SUM(orders.total_price*(positions.commission_rate)/100) AS 'p_reals'
+                                                FROM orders INNER JOIN customers USING(customer_id)
+                                                INNER JOIN employees USING(employee_id)
+                                                INNER JOIN positions USING(position_id)
+                                                GROUP BY p_days,employees.first_name,employees.last_name,positions.position_name,employees.salary
+                                                ORDER BY p_days ASC ";
                                     $result_cday = mysqli_query($conn, $sql_cday);
                                     while ($rs_cday = mysqli_fetch_assoc($result_cday)) {
-                                        $total_day += $rs_cday['p_nums'];
+                                        $total_day += $rs_cday['p_reals'];
+                                        $total_sl1  += $rs_cday['salary'] / 30;
+                                        $total_sl2  += $rs_cday['p_reals'] + ($rs_cday['salary'] / 30)
                                     ?>
                                         <tr>
                                             <td class="align-middle text-center"><?= date_inters($rs_cday['p_days']) ?></td>
-                                            <td class="align-middle text-start"><?= $rs_cday['package_name'] ?></td>
-                                            <td class="align-middle text-center"><?= formatNumber($rs_cday['p_nums']) ?></td>
+                                            <td class="align-middle text-center"><?= $rs_cday['first_name'] ?>&nbsp;&nbsp;<?= $rs_cday['last_name'] ?></td>
+                                            <td class="align-middle text-center"><?= $rs_cday['position_name'] ?></td>
+                                            <td class="align-middle text-center"><?= formatNumber($rs_cday['salary'] / 30) ?></td>
+                                            <td class="align-middle text-center"><?= formatNumber($rs_cday['p_reals']) ?></td>
+                                            <td class="align-middle text-center"><?= formatNumber($rs_cday['p_reals'] + ($rs_cday['salary'] / 30)) ?></td>
                                         </tr>
                                     <?php } ?>
                                     <tr>
-                                        <td class="align-middle text-center fw-bold" colspan="2">รวม</td>
+                                        <td class="align-middle text-center fw-bold" colspan="3">รวม</td>
+                                        <td class="align-middle text-center fw-bold"><?php echo formatNumber($total_sl1); ?></td>
                                         <td class="align-middle text-center fw-bold"><?php echo formatNumber($total_day); ?></td>
+                                        <td class="align-middle text-center fw-bold"><?php echo formatNumber($total_sl2 ); ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -82,34 +98,50 @@ require 'config/function.php';
                     </div>
                     <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
                         <div class="table-responsive mt-3">
-                            <table class="table table-striped table-sm table-bordered table-hover text-nowrap">
+                        <table class="table table-striped table-sm table-bordered table-hover text-nowrap">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">ประจำเดือน</th>
-                                        <th class="text-start">แพ็กเกจ</th>
-                                        <th class="text-center">จำนวน (ครั้ง)</th>
+                                        <th class="text-center">ประจำวัน</th>
+                                        <th class="text-center">ชื่อ-นามสกุล</th>
+                                        <th class="text-center">ตำแหน่ง</th>
+                                        <th class="text-center">เงินเดือน</th>
+                                        <th class="text-center">ค่าคอมมิจชั่น (บาท)</th>
+                                        <th class="text-center">รวม (บาท)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     $total_day = 0;
-                                    $sql_cday = " SELECT DATE_FORMAT(orders.sale_date,'%Y-%m') AS 'p_days',packages.package_name,COUNT(orders_detail.package_id) AS 'p_nums' FROM orders 
-                                                INNER JOIN orders_detail USING(orders_id)
-                                                INNER JOIN packages USING(package_id)
-                                                GROUP BY p_days,packages.package_name ORDER BY p_days ASC";
+                                    $total_sl1 = 0;
+                                    $total_sl2 = 0;
+                                    $sql_cday = " SELECT DATE_FORMAT(orders.sale_date,'%Y-%m') AS 'p_days',
+                                                employees.first_name,employees.last_name,positions.position_name,employees.salary,
+                                                SUM(orders.total_price*(positions.commission_rate)/100) AS 'p_reals'
+                                                FROM orders INNER JOIN customers USING(customer_id)
+                                                INNER JOIN employees USING(employee_id)
+                                                INNER JOIN positions USING(position_id)
+                                                GROUP BY p_days,employees.first_name,employees.last_name,positions.position_name,employees.salary
+                                                ORDER BY p_days ASC ";
                                     $result_cday = mysqli_query($conn, $sql_cday);
                                     while ($rs_cday = mysqli_fetch_assoc($result_cday)) {
-                                        $total_day += $rs_cday['p_nums'];
+                                        $total_day += $rs_cday['p_reals'];
+                                        $total_sl1  += $rs_cday['salary'];
+                                        $total_sl2  += $rs_cday['p_reals'] + ($rs_cday['salary'])
                                     ?>
                                         <tr>
                                             <td class="align-middle text-center"><?= date_months($rs_cday['p_days']) ?></td>
-                                            <td class="align-middle text-start"><?= $rs_cday['package_name'] ?></td>
-                                            <td class="align-middle text-center"><?= formatNumber($rs_cday['p_nums']) ?></td>
+                                            <td class="align-middle text-center"><?= $rs_cday['first_name'] ?>&nbsp;&nbsp;<?= $rs_cday['last_name'] ?></td>
+                                            <td class="align-middle text-center"><?= $rs_cday['position_name'] ?></td>
+                                            <td class="align-middle text-center"><?= formatNumber($rs_cday['salary']) ?></td>
+                                            <td class="align-middle text-center"><?= formatNumber($rs_cday['p_reals']) ?></td>
+                                            <td class="align-middle text-center"><?= formatNumber($rs_cday['p_reals'] + ($rs_cday['salary'])) ?></td>
                                         </tr>
                                     <?php } ?>
                                     <tr>
-                                        <td class="align-middle text-center fw-bold" colspan="2">รวม</td>
+                                        <td class="align-middle text-center fw-bold" colspan="3">รวม</td>
+                                        <td class="align-middle text-center fw-bold"><?php echo formatNumber($total_sl1); ?></td>
                                         <td class="align-middle text-center fw-bold"><?php echo formatNumber($total_day); ?></td>
+                                        <td class="align-middle text-center fw-bold"><?php echo formatNumber($total_sl2 ); ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -117,34 +149,50 @@ require 'config/function.php';
                     </div>
                     <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
                         <div class="table-responsive mt-3">
-                            <table class="table table-striped table-sm table-bordered table-hover text-nowrap">
+                        <table class="table table-striped table-sm table-bordered table-hover text-nowrap">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">ประจำปี</th>
-                                        <th class="text-start">แพ็กเกจ</th>
-                                        <th class="text-center">จำนวน (ครั้ง)</th>
+                                        <th class="text-center">ประจำวัน</th>
+                                        <th class="text-center">ชื่อ-นามสกุล</th>
+                                        <th class="text-center">ตำแหน่ง</th>
+                                        <th class="text-center">รายได้ต่อปี (เงินเดือน*12)</th>
+                                        <th class="text-center">ค่าคอมมิจชั่น (บาท)</th>
+                                        <th class="text-center">รวม (บาท)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     $total_day = 0;
-                                    $sql_cday = " SELECT DATE_FORMAT(orders.sale_date,'%Y') AS 'p_days',packages.package_name,COUNT(orders_detail.package_id) AS 'p_nums' FROM orders 
-                                                INNER JOIN orders_detail USING(orders_id)
-                                                INNER JOIN packages USING(package_id)
-                                                GROUP BY p_days,packages.package_name ORDER BY p_days ASC";
+                                    $total_sl1 = 0;
+                                    $total_sl2 = 0;
+                                    $sql_cday = " SELECT DATE_FORMAT(orders.sale_date,'%Y') AS 'p_days',
+                                                employees.first_name,employees.last_name,positions.position_name,employees.salary,
+                                                SUM(orders.total_price*(positions.commission_rate)/100) AS 'p_reals'
+                                                FROM orders INNER JOIN customers USING(customer_id)
+                                                INNER JOIN employees USING(employee_id)
+                                                INNER JOIN positions USING(position_id)
+                                                GROUP BY p_days,employees.first_name,employees.last_name,positions.position_name,employees.salary
+                                                ORDER BY p_days ASC ";
                                     $result_cday = mysqli_query($conn, $sql_cday);
                                     while ($rs_cday = mysqli_fetch_assoc($result_cday)) {
-                                        $total_day += $rs_cday['p_nums'];
+                                        $total_day += $rs_cday['p_reals'];
+                                        $total_sl1  += $rs_cday['salary'] *12;
+                                        $total_sl2  += $rs_cday['p_reals'] + ($rs_cday['salary'] *12)
                                     ?>
                                         <tr>
                                             <td class="align-middle text-center"><?= $rs_cday['p_days'] ?></td>
-                                            <td class="align-middle text-start"><?= $rs_cday['package_name'] ?></td>
-                                            <td class="align-middle text-center"><?= formatNumber($rs_cday['p_nums']) ?></td>
+                                            <td class="align-middle text-center"><?= $rs_cday['first_name'] ?>&nbsp;&nbsp;<?= $rs_cday['last_name'] ?></td>
+                                            <td class="align-middle text-center"><?= $rs_cday['position_name'] ?></td>
+                                            <td class="align-middle text-center"><?= formatNumber($rs_cday['salary'] *12) ?></td>
+                                            <td class="align-middle text-center"><?= formatNumber($rs_cday['p_reals']) ?></td>
+                                            <td class="align-middle text-center"><?= formatNumber($rs_cday['p_reals'] + ($rs_cday['salary'] *12)) ?></td>
                                         </tr>
                                     <?php } ?>
                                     <tr>
-                                        <td class="align-middle text-center fw-bold" colspan="2">รวม</td>
+                                        <td class="align-middle text-center fw-bold" colspan="3">รวม</td>
+                                        <td class="align-middle text-center fw-bold"><?php echo formatNumber($total_sl1); ?></td>
                                         <td class="align-middle text-center fw-bold"><?php echo formatNumber($total_day); ?></td>
+                                        <td class="align-middle text-center fw-bold"><?php echo formatNumber($total_sl2 ); ?></td>
                                     </tr>
                                 </tbody>
                             </table>

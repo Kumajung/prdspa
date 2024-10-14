@@ -61,7 +61,13 @@ require 'config/function.php';
         $edit_id = mysqli_real_escape_string($conn, $_GET['edit_id']);
         $sql_edit = " SELECT * FROM packages WHERE package_id = '$edit_id' ";
         $result_edit = mysqli_query($conn, $sql_edit);
+        $num_edit = mysqli_num_rows($result_edit);
+        if($num_edit === 0){
+            header("Location:package.php");
+        }
         $rs_edit = mysqli_fetch_assoc($result_edit);
+    }else{
+        header("Location:package.php");
     }
     ?>
     <main>

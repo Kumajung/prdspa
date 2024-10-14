@@ -38,8 +38,8 @@
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="report_customer.php">รายงานลูกค้า</a></li>
                             <li><a class="dropdown-item" href="report_package.php">รายงานแพ็กเกจ</a></li>
-                            <li><a class="dropdown-item" href="#">รายงานยอดขาย</a></li>
-                            <li><a class="dropdown-item" href="#">รายงานจำแนกตามพนักงาน</a></li>
+                            <li><a class="dropdown-item" href="report_order.php">รายงานยอดขาย</a></li>
+                            <li><a class="dropdown-item" href="report_employee.php">รายงานพนักงาน</a></li>
                         </ul>
                     </li>
                 </ul>

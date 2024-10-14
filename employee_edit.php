@@ -79,7 +79,7 @@
     <main>
         <div class="container marketing">
             <h1 class="mb-3 py-5">ข้อมูลพนักงาน</h1>
-            <div class="col-md-6 mx-auto mb-3">
+            <div class="col-lg-6 col-md-12 mx-auto mb-3">
                 <form id="frm" method="POST">
                     <div class="card">
                         <div class="card-header">

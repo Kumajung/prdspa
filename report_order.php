@@ -31,7 +31,7 @@ require 'config/function.php';
     <?php require 'layout/header.php'; ?>
     <main>
         <div class="container marketing">
-            <h1 class="mb-3 py-5 text-center">รายงานลูกค้า</h1>
+            <h1 class="mb-3 py-5 text-center">รายงานยอดขาย</h1>
             <div class="col-md-12">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
@@ -47,56 +47,29 @@ require 'config/function.php';
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
                         <div class="table-responsive mt-3">
-                            <h5 class="mb-3">ลูกค้าเป็นสมาชิก</h5>
                             <table class="table table-striped table-sm table-bordered table-hover text-nowrap">
                                 <thead>
                                     <tr>
                                         <th class="text-center">ประจำวัน</th>
-                                        <th class="text-center">จำนวน (คน)</th>
+                                        <th class="text-center">จำนวน (บาท)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     $total_day = 0;
-                                    $sql_cday = " SELECT DATE_FORMAT(customers.member_date, '%Y-%m-%d') AS 'c_days',COUNT(customers.customer_id) AS 'c_num_days' 
-                                                  FROM customers WHERE is_member = 1
-                                                  GROUP BY c_days ORDER BY c_days ";
+                                    $sql_cday = " SELECT DATE_FORMAT(orders.sale_date,'%Y-%m-%d') AS 'p_days',SUM(orders.total_price*(100-positions.commission_rate)/100) AS 'p_reals'
+                                                FROM orders INNER JOIN customers USING(customer_id)
+                                                INNER JOIN employees USING(employee_id)
+                                                INNER JOIN positions USING(position_id)
+                                                GROUP BY p_days
+                                                ORDER BY p_days ASC ";
                                     $result_cday = mysqli_query($conn, $sql_cday);
                                     while ($rs_cday = mysqli_fetch_assoc($result_cday)) {
-                                        $total_day += $rs_cday['c_num_days'];
+                                        $total_day += $rs_cday['p_reals'];
                                     ?>
                                         <tr>
-                                            <td class="align-middle text-center"><?= date_inters($rs_cday['c_days']) ?></td>
-                                            <td class="align-middle text-center"><?= formatNumber($rs_cday['c_num_days']) ?></td>
-                                        </tr>
-                                    <?php } ?>
-                                    <tr>
-                                        <td class="align-middle text-center fw-bold">รวม</td>
-                                        <td class="align-middle text-center fw-bold"><?php echo formatNumber($total_day); ?></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <h5 class="mb-3">ลูกค้าไม่เป็นสมาชิก</h5>
-                            <table class="table table-striped table-sm table-bordered table-hover text-nowrap">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">ประจำวัน</th>
-                                        <th class="text-center">จำนวน (คน)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $total_day = 0;
-                                    $sql_cday = " SELECT DATE_FORMAT(customers.member_date, '%Y-%m-%d') AS 'c_days',COUNT(customers.customer_id) AS 'c_num_days' 
-                                                  FROM customers WHERE is_member = 0
-                                                  GROUP BY c_days ORDER BY c_days ";
-                                    $result_cday = mysqli_query($conn, $sql_cday);
-                                    while ($rs_cday = mysqli_fetch_assoc($result_cday)) {
-                                        $total_day += $rs_cday['c_num_days'];
-                                    ?>
-                                        <tr>
-                                            <td class="align-middle text-center"><?= date_inters($rs_cday['c_days']) ?></td>
-                                            <td class="align-middle text-center"><?= formatNumber($rs_cday['c_num_days']) ?></td>
+                                            <td class="align-middle text-center"><?= date_inters($rs_cday['p_days']) ?></td>
+                                            <td class="align-middle text-center"><?= formatNumber($rs_cday['p_reals']) ?></td>
                                         </tr>
                                     <?php } ?>
                                     <tr>
@@ -109,56 +82,29 @@ require 'config/function.php';
                     </div>
                     <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
                         <div class="table-responsive mt-3">
-                            <h5 class="mb-3">ลูกค้าเป็นสมาชิก</h5>
-                            <table class="table table-striped table-sm table-bordered table-hover text-nowrap">
+                        <table class="table table-striped table-sm table-bordered table-hover text-nowrap">
                                 <thead>
                                     <tr>
                                         <th class="text-center">ประจำเดือน</th>
-                                        <th class="text-center">จำนวน (คน)</th>
+                                        <th class="text-center">จำนวน (บาท)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     $total_day = 0;
-                                    $sql_cday = " SELECT DATE_FORMAT(customers.member_date, '%Y-%m') AS 'c_days',COUNT(customers.customer_id) AS 'c_num_days' 
-                                                  FROM customers WHERE is_member = 1
-                                                  GROUP BY c_days ORDER BY c_days ";
+                                    $sql_cday = " SELECT DATE_FORMAT(orders.sale_date,'%Y-%m') AS 'p_days',SUM(orders.total_price*(100-positions.commission_rate)/100) AS 'p_reals'
+                                                FROM orders INNER JOIN customers USING(customer_id)
+                                                INNER JOIN employees USING(employee_id)
+                                                INNER JOIN positions USING(position_id)
+                                                GROUP BY p_days
+                                                ORDER BY p_days ASC ";
                                     $result_cday = mysqli_query($conn, $sql_cday);
                                     while ($rs_cday = mysqli_fetch_assoc($result_cday)) {
-                                        $total_day += $rs_cday['c_num_days'];
+                                        $total_day += $rs_cday['p_reals'];
                                     ?>
                                         <tr>
-                                            <td class="align-middle text-center"><?= date_months($rs_cday['c_days']) ?></td>
-                                            <td class="align-middle text-center"><?= formatNumber($rs_cday['c_num_days']) ?></td>
-                                        </tr>
-                                    <?php } ?>
-                                    <tr>
-                                        <td class="align-middle text-center fw-bold">รวม</td>
-                                        <td class="align-middle text-center fw-bold"><?php echo formatNumber($total_day); ?></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <h5 class="mb-3">ลูกค้าไม่เป็นสมาชิก</h5>
-                            <table class="table table-striped table-sm table-bordered table-hover text-nowrap">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">ประจำเดือน</th>
-                                        <th class="text-center">จำนวน (คน)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $total_day = 0;
-                                    $sql_cday = " SELECT DATE_FORMAT(customers.member_date, '%Y-%m') AS 'c_days',COUNT(customers.customer_id) AS 'c_num_days' 
-                                                  FROM customers WHERE is_member = 0
-                                                  GROUP BY c_days ORDER BY c_days ";
-                                    $result_cday = mysqli_query($conn, $sql_cday);
-                                    while ($rs_cday = mysqli_fetch_assoc($result_cday)) {
-                                        $total_day += $rs_cday['c_num_days'];
-                                    ?>
-                                        <tr>
-                                            <td class="align-middle text-center"><?= date_months($rs_cday['c_days']) ?></td>
-                                            <td class="align-middle text-center"><?= formatNumber($rs_cday['c_num_days']) ?></td>
+                                            <td class="align-middle text-center"><?= date_months($rs_cday['p_days']) ?></td>
+                                            <td class="align-middle text-center"><?= formatNumber($rs_cday['p_reals']) ?></td>
                                         </tr>
                                     <?php } ?>
                                     <tr>
@@ -171,56 +117,29 @@ require 'config/function.php';
                     </div>
                     <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
                         <div class="table-responsive mt-3">
-                            <h5 class="mb-3">ลูกค้าเป็นสมาชิก</h5>
-                            <table class="table table-striped table-sm table-bordered table-hover text-nowrap">
+                        <table class="table table-striped table-sm table-bordered table-hover text-nowrap">
                                 <thead>
                                     <tr>
                                         <th class="text-center">ประจำปี</th>
-                                        <th class="text-center">จำนวน (คน)</th>
+                                        <th class="text-center">จำนวน (บาท)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     $total_day = 0;
-                                    $sql_cday = " SELECT DATE_FORMAT(customers.member_date, '%Y') AS 'c_days',COUNT(customers.customer_id) AS 'c_num_days' 
-                                                  FROM customers WHERE is_member = 1
-                                                  GROUP BY c_days ORDER BY c_days ";
+                                    $sql_cday = " SELECT DATE_FORMAT(orders.sale_date,'%Y') AS 'p_days',SUM(orders.total_price*(100-positions.commission_rate)/100) AS 'p_reals'
+                                                FROM orders INNER JOIN customers USING(customer_id)
+                                                INNER JOIN employees USING(employee_id)
+                                                INNER JOIN positions USING(position_id)
+                                                GROUP BY p_days
+                                                ORDER BY p_days ASC ";
                                     $result_cday = mysqli_query($conn, $sql_cday);
                                     while ($rs_cday = mysqli_fetch_assoc($result_cday)) {
-                                        $total_day += $rs_cday['c_num_days'];
+                                        $total_day += $rs_cday['p_reals'];
                                     ?>
                                         <tr>
-                                            <td class="align-middle text-center"><?= $rs_cday['c_days'] ?></td>
-                                            <td class="align-middle text-center"><?= formatNumber($rs_cday['c_num_days']) ?></td>
-                                        </tr>
-                                    <?php } ?>
-                                    <tr>
-                                        <td class="align-middle text-center fw-bold">รวม</td>
-                                        <td class="align-middle text-center fw-bold"><?php echo formatNumber($total_day); ?></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <h5 class="mb-3">ลูกค้าไม่เป็นสมาชิก</h5>
-                            <table class="table table-striped table-sm table-bordered table-hover text-nowrap">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">ประจำปี</th>
-                                        <th class="text-center">จำนวน (คน)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $total_day = 0;
-                                    $sql_cday = " SELECT DATE_FORMAT(customers.member_date, '%Y') AS 'c_days',COUNT(customers.customer_id) AS 'c_num_days' 
-                                                  FROM customers WHERE is_member = 0
-                                                  GROUP BY c_days ORDER BY c_days ";
-                                    $result_cday = mysqli_query($conn, $sql_cday);
-                                    while ($rs_cday = mysqli_fetch_assoc($result_cday)) {
-                                        $total_day += $rs_cday['c_num_days'];
-                                    ?>
-                                        <tr>
-                                            <td class="align-middle text-center"><?= $rs_cday['c_days'] ?></td>
-                                            <td class="align-middle text-center"><?= formatNumber($rs_cday['c_num_days']) ?></td>
+                                            <td class="align-middle text-center"><?= $rs_cday['p_days'] ?></td>
+                                            <td class="align-middle text-center"><?= formatNumber($rs_cday['p_reals']) ?></td>
                                         </tr>
                                     <?php } ?>
                                     <tr>
