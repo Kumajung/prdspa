@@ -9,6 +9,11 @@
     <meta name="author" content="i-Spa, Inc.">
     <meta name="generator" content="Hugo 0.122.0">
     <title>SPA</title>
+    <link rel="icon" type="image/png" href="dist/favicon/favicon-48x48.png" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="dist/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="dist/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="dist/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="dist/favicon/site.webmanifest" />
     <link href="./dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="dist/css/carousel.css" rel="stylesheet">
@@ -61,8 +66,9 @@
                                 </div>
                             </div>
                             <div class="form-group row mb-3">
-                                <div class="offset-sm-3 col-sm-6 d-grid">
-                                    <button type="submit" name="submit" class="btn btn-primary"><i class="fa-regular fa-floppy-disk"></i> บันทึก</button>
+                                <div class="offset-sm-3 col-sm-9">
+                                    <button type="submit" class="btn btn-primary" name="submit"><i class="far fa-save"></i> บันทึกข้อมูล</button>
+                                    <button type="reset" class="btn btn-warning re_frm"><i class="fas fa-redo"></i> รีเซ็ท</button>
                                 </div>
                             </div>
                         </div>

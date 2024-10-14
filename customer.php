@@ -12,6 +12,11 @@ require 'config/function.php';
     <meta name="author" content="i-Spa, Inc.">
     <meta name="generator" content="Hugo 0.122.0">
     <title>SPA</title>
+    <link rel="icon" type="image/png" href="dist/favicon/favicon-48x48.png" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="dist/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="dist/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="dist/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="dist/favicon/site.webmanifest" />
     <link href="./dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="dist/css/carousel.css" rel="stylesheet">
