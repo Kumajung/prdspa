@@ -29,48 +29,96 @@
     <?php
     if (isset($_POST['submit'])) {
         /* mysqli_real_escape_string ป้องกันการโจมตีแบบ SQL Injection (SQL Injection) */
-        $first_name = mysqli_real_escape_string($conn, $_POST['first_name']);
-        $last_name = mysqli_real_escape_string($conn, $_POST['last_name']);
-        $telephone = mysqli_real_escape_string($conn, $_POST['telephone']);
-        $salary = mysqli_real_escape_string($conn, $_POST['salary']);
-        $position_id = mysqli_real_escape_string($conn, $_POST['position_id']);
-        $sql = " INSERT INTO employees VALUES(NULL,'$first_name','$last_name','$telephone','$salary','$position_id') ";
-        $result = mysqli_query($conn, $sql);
-        if ($result) {
-    ?>
-            <script>
+        $sale_date = mysqli_real_escape_string($conn, $_POST['sale_date']);
+        $customer_id = mysqli_real_escape_string($conn, $_POST['customer_id']);
+        $employee_id = mysqli_real_escape_string($conn, $_POST['employee_id']);
+        $orders_type_id = mysqli_real_escape_string($conn, $_POST['orders_type_id']);
+
+
+        /* Array */
+        $package_id = $_POST['package_id'];
+        $service_date = $_POST['service_date'];
+        $price = $_POST['price'];
+        $package_qty = $_POST['package_qty'];
+
+        /* Save Orders Table */
+        $sql_order = " INSERT INTO orders VALUES(NULL,'$orders_type_id','$customer_id','$employee_id',0,0,'$sale_date') ";
+        $result_order = mysqli_query($conn,$sql_order);
+        $last_id = mysqli_insert_id($conn);
+
+        /* Save Orders_detail Table */
+        for ($i = 0; $i < count($package_id); $i++) {
+            $sql_ord = " INSERT INTO orders_detail VALUES(NULL,'$last_id','{$package_id[$i]}','{$service_date[$i]}',{$price[$i]},{$package_qty[$i]})";
+            $result_ord = mysqli_query($conn,$sql_ord);
+        }
+
+        /* Check Total & Discount */
+        $total_price = 0;
+        $total_discount = 0;
+        $sql_check = " SELECT * FROM orders_detail WHERE orders_id = '$last_id' ";
+        $result_check = mysqli_query($conn,$sql_check);
+        while($rs_check = mysqli_fetch_assoc($result_check)){
+            $sql_pk = " SELECT * FROM packages WHERE package_id = '{$rs_check['package_id']}' ";
+            $result_pk = mysqli_query($conn,$sql_pk);
+            $rs_pk = mysqli_fetch_assoc($result_pk);
+            $total_price += $rs_check['price']*$rs_check['package_qty'];
+            if($rs_check['price'] >$rs_pk['price']){
+                $total_discount += ($rs_check['price']-$rs_pk['price'])*$rs_check['package_qty'];
+            }else{
+                $total_discount += ($rs_pk['price']-$rs_check['price'])*$rs_check['package_qty'];
+            }
+        }
+
+        /* Update Total & Discount to Orders Table */
+
+        $sql_update = " UPDATE orders SET total_price = $total_price ,
+                                          discount_price = $total_discount
+                                          WHERE orders_id = '$last_id' ";
+        $result_update = mysqli_query($conn,$sql_update);
+        if($result_update){
+        ?>
+        <script>
                 $(() => {
                     Swal.fire({
                         icon: "success",
                         title: 'บันทึกข้อมูลสำเร็จ',
                         showConfirmButton: false,
                         timer: 1500
-                    })
+                    }).then(()=>{
+                        window.location.href = 'index.php';
+                    });
                 })
             </script>
-    <?php
+        <?php
         }
+    ?>
+    <?php
     }
     ?>
     <main>
         <div class="container marketing">
             <h1 class="mb-3 py-5">ข้อมูลออเดอร์</h1>
             <div class="col-md-12 mx-auto mb-3">
-                <form id="frm" method="POST">
+                <form id="frm" method="POST" action="" enctype="multipart/form-data">
                     <div class="card">
                         <div class="card-header">
                             <!-- employees_type -->
                             <i class="fa-regular fa-rectangle-list"></i> ส่วนจัดการออเดอร์
                         </div>
                         <div class="card-body">
-
+                            <div class="form-group row mb-3">
+                                <label for="last_name" class="col-sm-3 col-form-label">วันที่ทำรายการ</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="datetime-local" step="1" name="sale_date" value="<?php echo date('Y-m-d H:i:s') ?>" id="sale_date">
+                                </div>
+                            </div>
                             <div class="form-group row mb-3">
                                 <label for="last_name" class="col-sm-3 col-form-label">ลูกค้า</label>
                                 <div class="col-sm-9">
                                     <?php
                                     $member_array = ['ลูกค้าไม่เป็นสมาชิก', 'ลูกค้าสมาชิก'];
                                     ?>
-                                    <select class="form-control" name="position_id" id="position_id">
+                                    <select class="form-control" name="customer_id" id="customer_id" required>
                                         <option value="">เลือกลูกค้า</option>
                                         <?php
                                         $sql = " SELECT * FROM customers ORDER BY customer_id ASC ";
@@ -85,14 +133,16 @@
                             <div class="form-group row mb-3">
                                 <label for="telephone" class="col-sm-3 col-form-label">พนักงาน</label>
                                 <div class="col-sm-9">
-                                    <select class="form-control" name="customer_id" id="customer_id">
+                                    <select class="form-control" name="employee_id" id="employee_id" required>
                                         <option value="">เลือกพนักงาน</option>
                                         <?php
-                                        $sql = " SELECT * FROM employees ORDER BY employee_id ASC ";
+                                        $sql = " SELECT employees.*,positions.position_name FROM employees 
+                                        INNER JOIN positions USING(position_id)
+                                        ORDER BY employees.employee_id ASC ";
                                         $result = mysqli_query($conn, $sql);
                                         while ($rs = mysqli_fetch_assoc($result)) {
                                         ?>
-                                            <option value="<?php echo $rs['employee_id']; ?>"><?php echo $rs['first_name']; ?>&nbsp;&nbsp;<?php echo $rs['last_name']; ?></option>
+                                            <option value="<?php echo $rs['employee_id']; ?>"><?php echo $rs['first_name']; ?>&nbsp;&nbsp;<?php echo $rs['last_name']; ?> (<?php echo $rs['position_name']; ?>)</option>
                                         <?php } ?>
                                     </select>
                                 </div>
@@ -115,14 +165,20 @@
                             <div class="form-group row mb-3">
                                 <label for="telephone" class="col-sm-3 col-form-label">รายการ</label>
                                 <div class="col-sm-9">
+                                    <div class="alert alert-info" role="alert">
+                                        <h4 class="alert-heading"><i class="fa-solid fa-circle-info"></i> การระบุราคาขาย</h4>
+                                        <p>ในกรณีส่งเสริมการขายหรือสั่งซื้อแพ็กเกจจำนวนมาก ทางร้านสามารถกำหนดราคาพิเศษที่แตกต่างจากราคาปกติได้</p>
+                                        <hr>
+                                        <p class="mb-0">เมื่อยืนยันออเดอร์ ระบบจะคำนวณส่วนลดจากราคาแพ็กเกจเดิมและบันทึกส่วนลดเข้าสู่ระบบ</p>
+                                    </div>
                                     <div class="table-responsive">
                                         <table class="table table-bordered table-sm table-hover table-striped text-nowrap">
                                             <thead>
                                                 <tr>
                                                     <th class="text-center align-middle">#</th>
                                                     <th class="text-center align-middle">แพ็กเกจ</th>
-                                                    <th class="text-center align-middle">ราคาปกติ</th>
-                                                    <th class="text-center align-middle">ราคาขาย</th>
+                                                    <th class="text-center align-middle">วันที่มาใช้บริการ</th>
+                                                    <th class="text-center align-middle">ราคาขายต่อหน่วย</th>
                                                     <th class="text-center align-middle">จำนวน</th>
                                                     <th class="text-center align-middle">จัดการ</th>
                                                 </tr>
@@ -130,13 +186,24 @@
                                             <tbody>
                                                 <tr>
                                                     <td class="align-middle text-center">1</td>
-                                                    <td class="align-middle"><input type="text" class="form-control" name="student_code[]" value="" autocomplete="off"></td>
-                                                    <td class="align-middle"><input type="text" class="form-control" name="student_code[]" value="" autocomplete="off"></td>
                                                     <td class="align-middle">
-                                                        <input type="text" class="form-control" name="student_firstname[]" value="" autocomplete="off">
+                                                        <select class="form-control" name="package_id[]" id="package_id_1" required onchange="pkPrice(1)">
+                                                            <option value="" data-price="">เลือกแพ็กเกจ</option>
+                                                            <?php
+                                                            $sql_pakage = " SELECT * FROM packages ORDER BY package_id ASC ";
+                                                            $result_pakage = mysqli_query($conn, $sql_pakage);
+                                                            while ($rs_pakage = mysqli_fetch_assoc($result_pakage)) {
+                                                            ?>
+                                                                <option value="<?php echo $rs_pakage['package_id']; ?>" data-price="<?php echo $rs_pakage['price']; ?>"><?php echo $rs_pakage['package_name']; ?> ราคา <?php echo number_format($rs_pakage['price'], 2); ?></option>
+                                                            <?php } ?>
+                                                        </select>
                                                     </td>
                                                     <td class="align-middle">
-                                                        <input type="text" class="form-control" name="student_lastname[]" value="" autocomplete="off">
+                                                        <input type="datetime-local" step="1" class="form-control" name="service_date[]" id="service_date_1" value="<?php echo date('Y-m-d H:i:s') ?>" autocomplete="off" required>
+                                                    </td>
+                                                    <td class="align-middle"><input type="number" class="form-control text-end" id="price_1" name="price[]" step="0.01" value="" autocomplete="off" required></td>
+                                                    <td class="align-middle">
+                                                        <input type="number" class="form-control text-center" name="package_qty[]" id="package_qty_1" value="1" autocomplete="off" required>
                                                     </td>
                                                     <td class="align-middle text-center">
                                                         <button class="btn btn-sm btn-success btn-adds" type="button"><i class="fas fa-plus"></i></button>
@@ -215,6 +282,50 @@
                     })
                 }
             });
+        }
+
+        // Add Element
+        let m = 2;
+        $('.btn-adds').click(() => {
+            let tb_content = `<tr>
+                                <td class="align-middle text-center">${m}</td>
+                                <td class="align-middle">
+                                    <select class="form-control" name="package_id[]" id="package_id_${m}" required onchange="pkPrice(${m})">
+                                        <option value="" data-price="">เลือกแพ็กเกจ</option>
+                                        <?php
+                                        $sql_pakage = " SELECT * FROM packages ORDER BY package_id ASC ";
+                                        $result_pakage = mysqli_query($conn, $sql_pakage);
+                                        while ($rs_pakage = mysqli_fetch_assoc($result_pakage)) {
+                                        ?>
+                                            <option value="<?php echo $rs_pakage['package_id']; ?>" data-price="<?php echo $rs_pakage['price']; ?>"><?php echo $rs_pakage['package_name']; ?> ราคา <?php echo number_format($rs_pakage['price'], 2); ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </td>
+                                <td class="align-middle">
+                                    <input type="datetime-local" step="1" class="form-control" name="service_date[]" id="service_date_${m}" value="<?php echo date('Y-m-d H:i:s') ?>" autocomplete="off" required>
+                                </td>
+                                <td class="align-middle"><input type="number" class="form-control text-end" id="price_${m}" name="price[]" step="0.01" value="" autocomplete="off" required></td>
+                                <td class="align-middle">
+                                    <input type="number" class="form-control text-center" name="package_qty[]" id="package_qty_${m}" value="1" autocomplete="off" required>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <button class="btn btn-sm btn-danger btn-dels" type="button"><i class="fas fa-minus-circle"></i></button>
+                                </td>
+                              </tr>`;
+            $('tbody').append(tb_content);
+            m++;
+        });
+        // Delete Element 
+        $("body").on("click", ".btn-dels", function() {
+            $(this).parents('tr').remove();
+            m--;
+        })
+
+        function pkPrice(elId) {
+            let selectedItem = $(`#package_id_${elId}`).val();
+            let selectedOption = $(`#package_id_${elId}`).find('option:selected');
+            let price = selectedOption.data('price');
+            $(`#price_${elId}`).val(price);
         }
     </script>
 

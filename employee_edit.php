@@ -71,6 +71,9 @@
             exit;
         }
         $rs_edit = mysqli_fetch_assoc($result_edit);
+    }else{
+        header('Location:employee.php');
+        exit;
     }
     ?>
     <main>

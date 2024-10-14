@@ -1,4 +1,7 @@
-<?php require 'config/connect.php'; ?>
+<?php 
+require 'config/connect.php'; 
+require 'config/function.php'; 
+?>
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
 
@@ -59,29 +62,34 @@
                             <th scope="col" class="text-center">เลขที่ออเดอร์</th>
                             <th scope="col">ลูกค้า</th>
                             <th scope="col">พนักงาน</th>
-                            <th scope="col">ยอดรวม</th>
-                            <th scope="col">ส่วนลด</th>
+                            <th scope="col" class="text-center">รวมสุทธิ</th>
                             <th scope="col">วันที่ทำรายการ</th>
                             <th scope="col" class="text-center">จัดการ</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        $sql_ordt = " SELECT * FROM orders ORDER BY orders_id ASC ";
+                        $member_array = ['ลูกค้าไม่เป็นสมาชิก', 'ลูกค้าสมาชิก'];
+                        $sql_ordt = " SELECT orders.*,
+                                        customers.first_name,customers.last_name,customers.is_member,
+                                        employees.first_name,employees.last_name,positions.position_name,positions.commission_rate
+                                        FROM orders INNER JOIN customers USING(customer_id)
+                                        INNER JOIN employees USING(employee_id)
+                                        INNER JOIN positions USING(position_id)
+                                        ORDER BY orders.orders_id ASC ";
                         $result_ordt = mysqli_query($conn, $sql_ordt);
+                        $num_ordt = mysqli_num_rows($result_ordt);
                         while ($rs_ordt = mysqli_fetch_assoc($result_ordt)) {
                         ?>
                             <tr>
-                                <td class="align-middle text-center"><?php echo $no; ?></td>
-                                <td class="align-middle"><?php echo $rs_ordt['orders_id']; ?></td>
-                                <td class="align-middle"><?php echo $rs_ordt['customer_id']; ?></td>
-                                <td class="align-middle"><?php echo $rs_ordt['orders_type_name']; ?></td>
-                                <td class="align-middle"><?php echo $rs_ordt['orders_type_name']; ?></td>
-                                <td class="align-middle"><?php echo $rs_ordt['orders_type_name']; ?></td>
+                                <td class="align-middle text-center"><?php echo $rs_ordt['orders_id']; ?></td>
+                                <td class="align-middle"><?php echo $rs_ordt['first_name']; ?>&nbsp;&nbsp;<?php echo $rs_ordt['last_name']; ?>(<?php echo $member_array[$rs_ordt['is_member']] ?>)</td>
+                                <td class="align-middle"><?php echo $rs_ordt['first_name']; ?>&nbsp;&nbsp;<?php echo $rs_ordt['last_name']; ?>(<?php echo $rs_ordt['position_name'] ?>)</td>
+                                <td class="align-middle text-center"><?php echo formatNumber($rs_ordt['total_price']*(100-$rs_ordt['commission_rate'])/100); ?></td>
+                                <td class="align-middle"><?php echo date_times($rs_ordt['sale_date']); ?></td>
                                 <td class="text-center align-middle">
-                                    <a class="btn btn-dark" href="order_type_detail.php?edit_id=<?php echo $rs_ordt['orders_type_id'] ?>"><i class="fa-regular fa-file-lines"></i> รายละเอียด</a>
-                                    <a class="btn btn-warning" href="order_type_edit.php?edit_id=<?php echo $rs_ordt['orders_type_id'] ?>"><i class="fa-regular fa-pen-to-square"></i> แก้ไข</a>
-                                    <button class="btn btn-danger" type="button" onclick="deletePos(<?php echo $rs_ordt['orders_type_id'] ?>,'<?php echo $rs_ordt['orders_type_name']; ?>')"><i class="fa-solid fa-trash"></i> ลบ</button>
+                                    <a class="btn btn-dark" href="order_detail.php?view_id=<?php echo $rs_ordt['orders_id'] ?>"><i class="fa-regular fa-file-lines"></i> รายละเอียด</a>
+                                    <button class="btn btn-danger" type="button" onclick="deletePos(<?php echo $rs_ordt['orders_id'] ?>,'เลขที่ออเดอร์ <?php echo $rs_ordt['orders_id']; ?>')"><i class="fa-solid fa-trash"></i> ลบ</button>
                                 </td>
                             </tr>
                         <?php
@@ -124,7 +132,7 @@
             }
         });
 
-        function deletePos(orders_type_id, txt) {
+        function deletePos(orders_id, txt) {
             Swal.fire({
                 title: `ยืนยันลบ ${txt}?`,
                 icon: "warning",
@@ -141,7 +149,7 @@
                         showConfirmButton: false,
                         timer: 1500
                     }).then(() => {
-                        window.location.href = 'order_type_delete.php?delete_id=' + orders_type_id;
+                        window.location.href = 'order_delete.php?delete_id=' + orders_id;
                     })
                 }
             });

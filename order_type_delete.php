@@ -7,5 +7,7 @@ if(isset($_GET['delete_id'])){
     if($result_delete){
         header("location:order_type.php");
     }
+}else{
+    header("location:order_type.php");
 }
 ?>

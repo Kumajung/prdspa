@@ -32,8 +32,9 @@ CREATE TABLE `positions` (
 
 CREATE TABLE `orders` (
   `orders_id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'รหัสออเดอร์',
-  `customer_id` varchar(50) NOT NULL COMMENT 'รหัสลูกค้า',
-  `employee_id` varchar(50) DEFAULT NULL COMMENT 'รหัสพนักงาน',
+  `orders_type_id` int(11) NOT NULL COMMENT 'รหัสประเภทออเดอร์',
+  `customer_id` int(11) NOT NULL COMMENT 'รหัสลูกค้า',
+  `employee_id` int(11) DEFAULT NULL COMMENT 'รหัสพนักงาน',
   `total_price` double(11,2) NOT NULL COMMENT 'ยอดรวม',
   `discount_price` double(11,2) NOT NULL COMMENT 'ส่วนลด',
   `sale_date` timestamp NULL DEFAULT COMMENT 'วันที่ทำรายการ',
@@ -43,7 +44,7 @@ CREATE TABLE `orders_detail` (
   `orders_detail_id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'รหัสการรายละเอียดการขาย',
   `orders_id` int(11) NOT NULL COMMENT 'รหัสออเดอร์',
   `package_id` int(11) NOT NULL COMMENT 'รหัสแพ็คเกจ',
-  `service_date` int(11) NOT NULL COMMENT 'วันที่ใช้จะเข้ามาใช้บริการ',
+  `service_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'วันที่ใช้จะเข้ามาใช้บริการ',
   `price` double(11,2) NOT NULL COMMENT 'ราคา ณ วันที่ซื้อ',
   `package_qty` int(11) DEFAULT NULL COMMENT 'จำนวนแพ็กเกจ'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

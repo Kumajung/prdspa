@@ -9,3 +9,11 @@ function date_times($strDate)
     $strSeconds = date("s", strtotime($strDate));
     return "$strDay/$strMonth/$strYear $strHour:$strMinute:$strSeconds";
 }
+
+function formatNumber($number) {
+    if (intval($number) == $number) {
+        return number_format(intval($number));
+    } else {
+        return number_format($number, 2);
+    }
+}
