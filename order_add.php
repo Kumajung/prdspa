@@ -24,8 +24,12 @@
     <?php
     if (isset($_POST['submit'])) {
         /* mysqli_real_escape_string ป้องกันการโจมตีแบบ SQL Injection (SQL Injection) */
-        $orders_type_name = mysqli_real_escape_string($conn, $_POST['orders_type_name']);
-        $sql = " INSERT INTO orders_type VALUES(NULL,'$orders_type_name') ";
+        $first_name = mysqli_real_escape_string($conn, $_POST['first_name']);
+        $last_name = mysqli_real_escape_string($conn, $_POST['last_name']);
+        $telephone = mysqli_real_escape_string($conn, $_POST['telephone']);
+        $salary = mysqli_real_escape_string($conn, $_POST['salary']);
+        $position_id = mysqli_real_escape_string($conn, $_POST['position_id']);
+        $sql = " INSERT INTO employees VALUES(NULL,'$first_name','$last_name','$telephone','$salary','$position_id') ";
         $result = mysqli_query($conn, $sql);
         if ($result) {
     ?>
@@ -46,43 +50,60 @@
     <main>
         <div class="container marketing">
             <h1 class="mb-3 py-5">ข้อมูลออเดอร์</h1>
-            <a class="btn btn-primary mb-3" href="order_add.php"><i class="fa-solid fa-plus"></i> เพิ่มออเดอร์</a>
-            <div class="table-responsive">
-                <table class="table table-striped table-hover table-bordered mt-3 text-nowrap" id="dataTable">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="text-center">เลขที่ออเดอร์</th>
-                            <th scope="col">ลูกค้า</th>
-                            <th scope="col">พนักงาน</th>
-                            <th scope="col">ยอดรวม</th>
-                            <th scope="col">ส่วนลด</th>
-                            <th scope="col">วันที่ทำรายการ</th>
-                            <th scope="col" class="text-center">จัดการ</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $sql_ordt = " SELECT * FROM orders ORDER BY orders_id ASC ";
-                        $result_ordt = mysqli_query($conn, $sql_ordt);
-                        while ($rs_ordt = mysqli_fetch_assoc($result_ordt)) {
-                        ?>
-                            <tr>
-                                <td class="align-middle text-center"><?php echo $no; ?></td>
-                                <td class="align-middle"><?php echo $rs_ordt['orders_id']; ?></td>
-                                <td class="align-middle"><?php echo $rs_ordt['customer_id']; ?></td>
-                                <td class="align-middle"><?php echo $rs_ordt['orders_type_name']; ?></td>
-                                <td class="align-middle"><?php echo $rs_ordt['orders_type_name']; ?></td>
-                                <td class="align-middle"><?php echo $rs_ordt['orders_type_name']; ?></td>
-                                <td class="text-center align-middle">
-                                    <a class="btn btn-dark" href="order_type_detail.php?edit_id=<?php echo $rs_ordt['orders_type_id'] ?>"><i class="fa-regular fa-file-lines"></i> รายละเอียด</a>
-                                    <a class="btn btn-warning" href="order_type_edit.php?edit_id=<?php echo $rs_ordt['orders_type_id'] ?>"><i class="fa-regular fa-pen-to-square"></i> แก้ไข</a>
-                                    <button class="btn btn-danger" type="button" onclick="deletePos(<?php echo $rs_ordt['orders_type_id'] ?>,'<?php echo $rs_ordt['orders_type_name']; ?>')"><i class="fa-solid fa-trash"></i> ลบ</button>
-                                </td>
-                            </tr>
-                        <?php
-                        } ?>
-                    </tbody>
-                </table>
+            <div class="col-md-6 mx-auto mb-3">
+                <form id="frm" method="POST">
+                    <div class="card">
+                        <div class="card-header">
+                            <!-- employees_type -->
+                            <i class="fa-regular fa-rectangle-list"></i> ส่วนจัดการออเดอร์
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row mb-3">
+                                <label for="first_name" class="col-sm-3 col-form-label">ชื่อ</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="" autocomplete="off" required>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label for="last_name" class="col-sm-3 col-form-label">นามสกุล</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="" autocomplete="off" required>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label for="telephone" class="col-sm-3 col-form-label">เบอร์โทรศัพท์</label>
+                                <div class="col-sm-9">
+                                    <input type="tel" class="form-control" id="telephone" name="telephone" placeholder="" autocomplete="off" required>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label for="salary" class="col-sm-3 col-form-label">เงินเดือน</label>
+                                <div class="col-sm-9">
+                                    <input type="number" step="0.01" class="form-control" id="salary" name="salary" placeholder="" autocomplete="off" required>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label for="position_id" class="col-sm-3 col-form-label">ตำแหน่ง</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" name="position_id" id="position_id">
+                                        <?php
+                                        $sql = " SELECT * FROM positions ORDER BY position_id ASC ";
+                                        $result = mysqli_query($conn, $sql);
+                                        while ($rs = mysqli_fetch_assoc($result)) {
+                                        ?>
+                                            <option value="<?php echo $rs['position_id']; ?>"><?php echo $rs['position_name']; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <div class="offset-sm-3 col-sm-6 d-grid">
+                                    <button type="submit" name="submit" class="btn btn-primary"><i class="fa-regular fa-floppy-disk"></i> บันทึก</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
             <hr class="featurette-divider">
         </div>
@@ -119,7 +140,7 @@
             }
         });
 
-        function deletePos(orders_type_id, txt) {
+        function deletePos(position_id, txt) {
             Swal.fire({
                 title: `ยืนยันลบ ${txt}?`,
                 icon: "warning",
@@ -136,7 +157,7 @@
                         showConfirmButton: false,
                         timer: 1500
                     }).then(() => {
-                        window.location.href = 'order_type_delete.php?delete_id=' + orders_type_id;
+                        window.location.href = 'employee_delete.php?delete_id=' + position_id;
                     })
                 }
             });

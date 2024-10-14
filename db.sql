@@ -44,8 +44,8 @@ CREATE TABLE `orders_detail` (
   `orders_id` int(11) NOT NULL COMMENT 'รหัสออเดอร์',
   `package_id` int(11) NOT NULL COMMENT 'รหัสแพ็คเกจ',
   `service_date` int(11) NOT NULL COMMENT 'วันที่ใช้จะเข้ามาใช้บริการ',
-  `price` double(11,2) NOT NULL COMMENT 'รหัสลูกค้า',
-  `package_qty` int(11) DEFAULT NULL COMMENT 'รหัสลูกค้า'
+  `price` double(11,2) NOT NULL COMMENT 'ราคา ณ วันที่ซื้อ',
+  `package_qty` int(11) DEFAULT NULL COMMENT 'จำนวนแพ็กเกจ'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `orders_type` (
