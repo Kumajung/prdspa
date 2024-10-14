@@ -12,8 +12,8 @@
                             <i class="fa-regular fa-rectangle-list"></i> ออเดอร์</a>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="index.php">ออเดอร์</a></li>
-                            <li><a class="dropdown-item" href="order_type.php">ประเภทออเดอร์</a></li>
+                            <li><a class="dropdown-item" href="index.php">ตารางออเดอร์</a></li>
+                            <li><a class="dropdown-item" href="order_type.php">ตารางประเภทออเดอร์</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
