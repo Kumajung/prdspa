@@ -54,7 +54,7 @@ require 'config/function.php';
                                         <th class="text-center">ชื่อ-นามสกุล</th>
                                         <th class="text-center">ตำแหน่ง</th>
                                         <th class="text-center">รายได้ต่อวัน (เงินเดือน/30)</th>
-                                        <th class="text-center">ค่าคอมมิจชั่น (บาท)</th>
+                                        <th class="text-center">ค่าคอมมิชชั่น (บาท)</th>
                                         <th class="text-center">รวม (บาท)</th>
                                     </tr>
                                 </thead>
@@ -101,11 +101,11 @@ require 'config/function.php';
                         <table class="table table-striped table-sm table-bordered table-hover text-nowrap">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">ประจำวัน</th>
+                                        <th class="text-center">ประจำเดือน</th>
                                         <th class="text-center">ชื่อ-นามสกุล</th>
                                         <th class="text-center">ตำแหน่ง</th>
                                         <th class="text-center">เงินเดือน</th>
-                                        <th class="text-center">ค่าคอมมิจชั่น (บาท)</th>
+                                        <th class="text-center">ค่าคอมมิชชั่น (บาท)</th>
                                         <th class="text-center">รวม (บาท)</th>
                                     </tr>
                                 </thead>
@@ -152,11 +152,11 @@ require 'config/function.php';
                         <table class="table table-striped table-sm table-bordered table-hover text-nowrap">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">ประจำวัน</th>
+                                        <th class="text-center">ประจำปี</th>
                                         <th class="text-center">ชื่อ-นามสกุล</th>
                                         <th class="text-center">ตำแหน่ง</th>
                                         <th class="text-center">รายได้ต่อปี (เงินเดือน*12)</th>
-                                        <th class="text-center">ค่าคอมมิจชั่น (บาท)</th>
+                                        <th class="text-center">ค่าคอมมิชชั่น (บาท)</th>
                                         <th class="text-center">รวม (บาท)</th>
                                     </tr>
                                 </thead>
