@@ -82,6 +82,11 @@
                     </div>
                 </form>
             </div>
+            <div class="col-lg-12 container">
+                <div class="alert alert-info" role="alert">
+                    <i class="fa-solid fa-circle-info"></i> ตำแหน่งพนักงานหากมีการใช้งานจะไม่สามารถลบได้
+                </div>
+            </div>
             <div class="table-responsive">
                 <table class="table table-striped table-hover table-bordered mt-3 text-nowrap" id="dataTable">
                     <thead>
