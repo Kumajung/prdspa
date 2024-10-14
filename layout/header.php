@@ -36,8 +36,10 @@
                             <i class="fa-regular fa-folder"></i> รายงาน</a>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">รายงาน 1</a></li>
-                            <li><a class="dropdown-item" href="#">รายงาน 2</a></li>
+                            <li><a class="dropdown-item" href="report_customer.php">รายงานลูกค้า</a></li>
+                            <li><a class="dropdown-item" href="report_package.php">รายงานแพ็กเกจ</a></li>
+                            <li><a class="dropdown-item" href="#">รายงานยอดขาย</a></li>
+                            <li><a class="dropdown-item" href="#">รายงานจำแนกตามพนักงาน</a></li>
                         </ul>
                     </li>
                 </ul>
