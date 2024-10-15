@@ -1,5 +1,5 @@
 
-## 🚀 Spa Management System
+## 🪷 Spa Management System
 ระบบจัดการสปา
 
 
