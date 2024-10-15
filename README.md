@@ -19,23 +19,28 @@
 - CRUD positions
 
 5. ตารางออเดอร์ (orders)
-- CR orders
+- CRD orders
 
 6. ตารางรายละเอียดออเดอร์ (orders_detail)
-- CR only orders_detail
+- R only orders_detail
 
 7. ตารางประเภทออเดอร์ (orders_type)
 - CRUD orders_type
 
 การออกรายงานจำแนกตาม
-
-
+- รายงานลูกค้า
+- รายงานแพ็กเกจ
+- รายงานยอดขาย
+- รายงานพนักงาน
 
 
 ## Version
 
-0.5
+1.0 
 
+## Demo Link
+
+https://dev.kumawork.com/project_spa/
 
 ## Authors
 
