@@ -55,6 +55,19 @@ require 'config/function.php';
                     }
                     ?>
                     <div class="form-group row mb-3">
+                        <label for="telephone" class="col-sm-3 col-form-label">พนักงาน</label>
+                        <div class="col-sm-9 pt-2">
+                            <?php
+                            $sql = " SELECT employees.*,positions.position_name,positions.commission_rate FROM employees 
+                                        INNER JOIN positions USING(position_id) WHERE employee_id = '{$rs_ord['employee_id']}' ";
+                            $result = mysqli_query($conn, $sql);
+                            $rs = mysqli_fetch_assoc($result);
+                            $commission_rate = $rs['commission_rate'];
+                            ?>
+                            <?php echo $rs['first_name']; ?>&nbsp;&nbsp;<?php echo $rs['last_name']; ?> (<?php echo $rs['position_name']; ?>)
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
                         <label for="last_name" class="col-sm-3 col-form-label">เลขออเดอร์</label>
                         <div class="col-sm-9 pt-2">
                             <?php echo $rs_ord['orders_id']; ?>
@@ -78,19 +91,6 @@ require 'config/function.php';
                             $rs = mysqli_fetch_assoc($result);
                             ?>
                             <?php echo $rs['first_name']; ?>&nbsp;&nbsp;<?php echo $rs['last_name']; ?>&nbsp;(<?php echo $member_array[$rs['is_member']]; ?>)
-                        </div>
-                    </div>
-                    <div class="form-group row mb-3">
-                        <label for="telephone" class="col-sm-3 col-form-label">พนักงาน</label>
-                        <div class="col-sm-9 pt-2">
-                            <?php
-                            $sql = " SELECT employees.*,positions.position_name,positions.commission_rate FROM employees 
-                                        INNER JOIN positions USING(position_id) WHERE employee_id = '{$rs_ord['employee_id']}' ";
-                            $result = mysqli_query($conn, $sql);
-                            $rs = mysqli_fetch_assoc($result);
-                            $commission_rate = $rs['commission_rate'];
-                            ?>
-                            <?php echo $rs['first_name']; ?>&nbsp;&nbsp;<?php echo $rs['last_name']; ?> (<?php echo $rs['position_name']; ?>)
                         </div>
                     </div>
                     <div class="form-group row mb-3">
