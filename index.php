@@ -59,6 +59,7 @@ require 'config/function.php';
                 <table class="table table-striped table-hover table-bordered mt-3 text-nowrap" id="dataTable">
                     <thead>
                         <tr>
+                            <th scope="col" class="text-center">ลำดับ</th>
                             <th scope="col" class="text-center">เลขที่ออเดอร์</th>
                             <th scope="col">ลูกค้า</th>
                             <th scope="col">พนักงาน</th>
@@ -69,9 +70,10 @@ require 'config/function.php';
                     </thead>
                     <tbody>
                         <?php
+                        $no = 1;
                         $member_array = ['ลูกค้าไม่เป็นสมาชิก', 'ลูกค้าสมาชิก'];
                         $sql_ordt = " SELECT orders.*,
-                                        customers.first_name,customers.last_name,customers.is_member,
+                                        customers.first_name AS 'c_first_name',customers.last_name AS 'c_last_name' ,customers.is_member,
                                         employees.first_name,employees.last_name,positions.position_name,positions.commission_rate
                                         FROM orders INNER JOIN customers USING(customer_id)
                                         INNER JOIN employees USING(employee_id)
@@ -82,8 +84,9 @@ require 'config/function.php';
                         while ($rs_ordt = mysqli_fetch_assoc($result_ordt)) {
                         ?>
                             <tr>
+                                <td class="align-middle text-center"><?php echo $no; ?></td>
                                 <td class="align-middle text-center"><?php echo $rs_ordt['orders_id']; ?></td>
-                                <td class="align-middle"><?php echo $rs_ordt['first_name']; ?>&nbsp;&nbsp;<?php echo $rs_ordt['last_name']; ?>(<?php echo $member_array[$rs_ordt['is_member']] ?>)</td>
+                                <td class="align-middle"><?php echo $rs_ordt['c_first_name']; ?>&nbsp;&nbsp;<?php echo $rs_ordt['c_last_name']; ?>(<?php echo $member_array[$rs_ordt['is_member']] ?>)</td>
                                 <td class="align-middle"><?php echo $rs_ordt['first_name']; ?>&nbsp;&nbsp;<?php echo $rs_ordt['last_name']; ?>(<?php echo $rs_ordt['position_name'] ?>)</td>
                                 <td class="align-middle text-center"><?php echo formatNumber($rs_ordt['total_price']*(100-$rs_ordt['commission_rate'])/100); ?></td>
                                 <td class="align-middle"><?php echo date_times($rs_ordt['sale_date']); ?></td>
@@ -93,6 +96,7 @@ require 'config/function.php';
                                 </td>
                             </tr>
                         <?php
+                        $no++;
                         } ?>
                     </tbody>
                 </table>
