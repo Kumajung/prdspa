@@ -92,6 +92,7 @@
                     <thead>
                         <tr>
                             <th scope="col" class="text-center">ลำดับ</th>
+                            <th scope="col" class="text-center">รหัสตำแหน่งพนักงาน</th>
                             <th scope="col">ชื่อตำแหน่งพนักงาน</th>
                             <th class="text-center" scope="col">คอมมิชชั่น</th>
                             <th scope="col" class="text-center">จัดการ</th>
@@ -111,6 +112,7 @@
                         ?>
                             <tr>
                                 <td class="align-middle text-center"><?php echo $no; ?></td>
+                                <td class="align-middle text-center"><?php echo $rs_positions['position_id']; ?></td>
                                 <td class="align-middle"><?php echo $rs_positions['position_name']; ?></td>
                                 <td class="align-middle text-center"><?php echo $rs_positions['commission_rate']; ?>%</td>
                                 <td class="text-center align-middle">

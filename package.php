@@ -95,6 +95,7 @@ require 'config/function.php';
                     <thead>
                         <tr>
                             <th scope="col" class="text-center">ลำดับ</th>
+                            <th scope="col" class="text-center">รหัสแพ็กเกจ</th>
                             <th scope="col">ชื่อแพ็กเกจ</th>
                             <th class="text-end" scope="col">ราคา</th>
                             <th scope="col" class="text-center">จัดการ</th>
@@ -114,6 +115,7 @@ require 'config/function.php';
                         ?>
                             <tr>
                                 <td class="align-middle text-center"><?php echo $no; ?></td>
+                                <td class="align-middle text-center"><?php echo $rs_package['package_id']; ?></td>
                                 <td class="align-middle"><?php echo $rs_package['package_name']; ?></td>
                                 <td class="align-middle"><?php echo number_format($rs_package['price'],2); ?></td>
                                 <td class="text-center align-middle">

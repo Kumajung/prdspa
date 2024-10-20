@@ -135,6 +135,7 @@ require 'config/function.php';
                     <thead>
                         <tr>
                             <th scope="col" class="text-center">ลำดับ</th>
+                            <th scope="col" class="text-center">รหัสลูกค้า</th>
                             <th scope="col">ชื่อ-นามสกุล</th>
                             <th class="text-center" scope="col">อีเมล</th>
                             <th class="text-center" scope="col">เบอร์โทรศัพท์</th>
@@ -158,6 +159,7 @@ require 'config/function.php';
                         ?>
                             <tr>
                                 <td class="align-middle text-center"><?php echo $no; ?></td>
+                                <td class="align-middle text-center"><?php echo $rs_customer['customer_id'] ?></td>
                                 <td class="align-middle"><?php echo $rs_customer['first_name']; ?>&nbsp;&nbsp;<?php echo $rs_customer['last_name']; ?></td>
                                 <td class="align-middle text-center"><?php echo $rs_customer['email']; ?></td>
                                 <td class="align-middle text-center"><?php echo $rs_customer['phone_number']; ?></td>

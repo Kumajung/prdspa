@@ -122,6 +122,7 @@
                     <thead>
                         <tr>
                             <th scope="col" class="text-center">ลำดับ</th>
+                            <th scope="col" class="text-center">รหัสพนักงาน</th>
                             <th scope="col">ชื่อ-นามสกุล</th>
                             <th class="text-center" scope="col">เบอร์โทรศัพท์</th>
                             <th class="text-center" scope="col">ตำแหน่ง</th>
@@ -143,6 +144,7 @@
                         ?>
                             <tr>
                                 <td class="align-middle text-center"><?php echo $no; ?></td>
+                                <td class="align-middle text-center"><?php echo $rs_employees['employee_id']; ?></td>
                                 <td class="align-middle"><?php echo $rs_employees['first_name']; ?>&nbsp;&nbsp;<?php echo $rs_employees['last_name']; ?></td>
                                 <td class="align-middle text-center"><?php echo $rs_employees['telephone']; ?></td>
                                 <td class="align-middle text-center"><?php echo number_format($rs_employees['salary'], 2); ?></td>

@@ -85,6 +85,7 @@
                     <thead>
                         <tr>
                             <th scope="col" class="text-center">ลำดับ</th>
+                            <th scope="col" class="text-center">รหัสประเภทออเดอร์</th>
                             <th scope="col">ประเภทออเดอร์</th>
                             <th scope="col" class="text-center">จัดการ</th>
                         </tr>
@@ -103,10 +104,11 @@
                         ?>
                             <tr>
                                 <td class="align-middle text-center"><?php echo $no; ?></td>
+                                <td class="align-middle text-center"><?php echo $rs_ordt['orders_type_id']; ?></td>
                                 <td class="align-middle"><?php echo $rs_ordt['orders_type_name']; ?></td>
                                 <td class="text-center align-middle">
-                                    <a class="btn btn-warning" href="order_type_edit.php?edit_id=<?php echo $rs_ordt['orders_type_id'] ?>"><i class="fa-regular fa-pen-to-square"></i> แก้ไข</a>
-                                    <button <?= $atv ?> class="btn btn-danger" type="button" onclick="deletePos(<?php echo $rs_ordt['orders_type_id'] ?>,'<?php echo $rs_ordt['orders_type_name']; ?>')"><i class="fa-solid fa-trash"></i> ลบ</button>
+                                    <a class="btn btn-warning" href="order_type_edit.php?edit_id=<?php echo $rs_ordt['orders_type_id']; ?>"><i class="fa-regular fa-pen-to-square"></i> แก้ไข</a>
+                                    <button <?= $atv ?> class="btn btn-danger" type="button" onclick="deletePos(<?php echo $rs_ordt['orders_type_id']; ?>,'<?php echo $rs_ordt['orders_type_name']; ?>')"><i class="fa-solid fa-trash"></i> ลบ</button>
                                 </td>
                             </tr>
                         <?php
